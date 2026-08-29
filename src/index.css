@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@import "@fontsource/figtree/400.css";
+@import "@fontsource/figtree/500.css";
+@import "@fontsource/figtree/600.css";
+@import "@fontsource/figtree/700.css";
+
+@theme {
+  --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
+
+  --color-canvas: #08090a;
+  --color-canvas-hover: #101113;
+  --color-canvas-deep: #050505;
+
+  --color-ink: #f7f7f8;
+  --color-ink-muted: #8a8f98;
+
+  --color-line: rgba(255, 255, 255, 0.08);
+  --color-line-strong: rgba(255, 255, 255, 0.14);
+  --color-surface: rgba(255, 255, 255, 0.03);
+
+  --color-accent: #ffffff;
+  --color-accent-soft: rgba(255, 255, 255, 0.08);
+  --color-accent-ink: #08090a;
+
+  --animate-orbit-slow: orbit 32s linear infinite;
+  --animate-orbit-slow-reverse: orbit 32s linear infinite reverse;
+  --animate-orbit-fast: orbit 22s linear infinite reverse;
+  --animate-orbit-fast-reverse: orbit 22s linear infinite;
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@layer base {
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
