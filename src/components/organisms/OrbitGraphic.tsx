@@ -28,27 +28,27 @@ const innerItems = [
 export function OrbitGraphic() {
   return (
     <div
-      className="relative mx-auto aspect-square w-full max-w-[420px]"
+      className="relative mx-auto aspect-square w-full max-w-[260px] sm:max-w-[340px] md:max-w-[420px]"
       role="img"
       aria-label="Orbit issue tracker features orbiting the product logo"
     >
       <OrbitRing
-        sizeClassName="w-full h-full"
+        sizeClassName="w-[84%] h-[84%]"
         items={outerItems}
         spinClassName="animate-orbit-slow"
         counterSpinClassName="animate-orbit-slow-reverse"
       />
       <OrbitRing
-        sizeClassName="w-[62%] h-[62%]"
+        sizeClassName="w-[54%] h-[54%]"
         items={innerItems}
         spinClassName="animate-orbit-fast"
         counterSpinClassName="animate-orbit-fast-reverse"
       />
 
-      <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent opacity-[0.07] blur-2xl" />
+      <div className="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent opacity-[0.07] blur-2xl sm:h-24 sm:w-24" />
 
-      <div className="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-line-strong bg-canvas-hover">
-        <LogoMark className="h-9 w-9" />
+      <div className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-line-strong bg-canvas-hover sm:h-20 sm:w-20">
+        <LogoMark className="h-6 w-6 sm:h-9 sm:w-9" />
       </div>
     </div>
   )

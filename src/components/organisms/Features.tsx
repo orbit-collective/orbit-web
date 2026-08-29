@@ -1,4 +1,5 @@
 import { Activity, Bell, LayoutDashboard, ListChecks, Shield, Users } from "lucide-react"
+import { Reveal } from "../atoms/Reveal"
 import { FeatureCard } from "../molecules/FeatureCard"
 
 const features = [
@@ -44,7 +45,7 @@ export function Features() {
   return (
     <section id="features" className="border-t border-line px-6 py-20 md:py-28">
       <div className="mx-auto max-w-6xl">
-        <div className="max-w-2xl">
+        <Reveal className="max-w-2xl">
           <h2 className="text-3xl font-semibold tracking-tight text-ink">
             Everything your team needs to move work forward
           </h2>
@@ -52,11 +53,13 @@ export function Features() {
             One workspace for planning, tracking, and reporting on the work that matters, without
             switching between five different tools.
           </p>
-        </div>
+        </Reveal>
 
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature) => (
-            <FeatureCard key={feature.title} {...feature} />
+          {features.map((feature, index) => (
+            <Reveal key={feature.title} delay={index * 80}>
+              <FeatureCard {...feature} />
+            </Reveal>
           ))}
         </div>
       </div>

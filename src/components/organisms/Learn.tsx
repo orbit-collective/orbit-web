@@ -1,4 +1,5 @@
 import { BookOpen, Compass, Rocket } from "lucide-react"
+import { Reveal } from "../atoms/Reveal"
 import { FeatureCard } from "../molecules/FeatureCard"
 
 const resources = [
@@ -23,18 +24,20 @@ export function Learn() {
   return (
     <section id="learn" className="border-t border-line px-6 py-20 md:py-28">
       <div className="mx-auto max-w-6xl">
-        <div className="max-w-2xl">
+        <Reveal className="max-w-2xl">
           <h2 className="text-3xl font-semibold tracking-tight text-ink">
             Learn how to get the most out of Orbit
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-ink-muted">
             Guides and resources to help your team set up projects the right way from day one.
           </p>
-        </div>
+        </Reveal>
 
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {resources.map((resource) => (
-            <FeatureCard key={resource.title} {...resource} />
+          {resources.map((resource, index) => (
+            <Reveal key={resource.title} delay={index * 80}>
+              <FeatureCard {...resource} />
+            </Reveal>
           ))}
         </div>
       </div>

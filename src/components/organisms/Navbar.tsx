@@ -4,6 +4,7 @@ import { Button } from "../atoms/Button"
 import { IconButton } from "../atoms/IconButton"
 import { Logo } from "../atoms/Logo"
 import { NavLink } from "../molecules/NavLink"
+import { cn } from "../../lib/cn"
 
 const navItems = [
   { key: "features", href: "#features", label: "Features" },
@@ -51,13 +52,17 @@ export function Navbar() {
         </IconButton>
       </div>
 
-      {isMenuOpen ? (
-        <nav
-          id="mobile-menu"
-          aria-label="Primary"
-          className="border-t border-line px-6 py-4 md:hidden"
-        >
-          <div className="flex flex-col gap-4">
+      <nav
+        id="mobile-menu"
+        aria-label="Primary"
+        inert={!isMenuOpen}
+        className={cn(
+          "grid transition-[grid-template-rows] duration-300 ease-in-out md:hidden",
+          isMenuOpen ? "grid-rows-[1fr] border-t border-line" : "grid-rows-[0fr]",
+        )}
+      >
+        <div className="overflow-hidden">
+          <div className="flex flex-col gap-4 px-6 py-4">
             {navItems.map((item) => (
               <NavLink
                 key={item.key}
@@ -74,8 +79,8 @@ export function Navbar() {
               Get started
             </Button>
           </div>
-        </nav>
-      ) : null}
+        </div>
+      </nav>
     </header>
   )
 }

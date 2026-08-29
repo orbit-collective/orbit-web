@@ -1,4 +1,5 @@
 import { Calendar, Kanban, List } from "lucide-react"
+import { Reveal } from "../atoms/Reveal"
 import { FeatureCard } from "../molecules/FeatureCard"
 
 const views = [
@@ -23,7 +24,7 @@ export function Workflow() {
   return (
     <section id="workflow" className="border-t border-line px-6 py-20 md:py-28">
       <div className="mx-auto max-w-6xl">
-        <div className="max-w-2xl">
+        <Reveal className="max-w-2xl">
           <h2 className="text-3xl font-semibold tracking-tight text-ink">
             Work the way your team already thinks
           </h2>
@@ -31,11 +32,13 @@ export function Workflow() {
             The same issues, viewed the way that fits the moment. Switch between them without
             losing your filters.
           </p>
-        </div>
+        </Reveal>
 
         <div className="mt-12 grid gap-4 sm:grid-cols-3">
-          {views.map((view) => (
-            <FeatureCard key={view.title} {...view} />
+          {views.map((view, index) => (
+            <Reveal key={view.title} delay={index * 80}>
+              <FeatureCard {...view} />
+            </Reveal>
           ))}
         </div>
       </div>
