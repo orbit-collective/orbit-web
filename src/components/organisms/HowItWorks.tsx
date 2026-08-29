@@ -1,7 +1,9 @@
 import { ArrowRightLeft, ClipboardList, FolderPlus, Rocket } from "lucide-react"
+import { useMemo } from "react"
 import { useScrollProgress } from "../../hooks/useScrollProgress"
+import { cn } from "../../lib/cn"
 import { Reveal } from "../atoms/Reveal"
-import { StepCard } from "../molecules/StepCard"
+import { HowItWorksPreview } from "./HowItWorksPreview"
 
 const steps = [
   {
@@ -28,34 +30,61 @@ const steps = [
 
 export function HowItWorks() {
   const { ref, progress } = useScrollProgress<HTMLDivElement>()
-  const trackTranslate = progress * (steps.length - 1) * -100
+
+  const activeIndex = useMemo(
+    () => Math.min(steps.length - 1, Math.floor(progress * steps.length)),
+    [progress],
+  )
+
+  const activeStep = steps[activeIndex]
 
   return (
     <section id="how-it-works" className="scroll-mt-16 border-t border-line">
       <div ref={ref} style={{ height: `${steps.length * 80}svh` }} className="relative">
-        <div className="sticky top-0 flex h-svh flex-col justify-center overflow-hidden px-6 py-16">
-          <Reveal className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
-            <h2 className="text-3xl font-semibold tracking-tight text-ink">How it works</h2>
-            <p className="mt-4 text-lg leading-relaxed text-ink-muted">
-              From an empty workspace to a shipped release, in four steps.
-            </p>
-          </Reveal>
+        <div className="sticky top-0 flex h-svh items-center overflow-hidden px-6">
+          <div className="mx-auto grid w-full max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-16">
+            <div>
+              <Reveal>
+                <h2 className="text-3xl font-semibold tracking-tight text-ink">How it works</h2>
+                <p className="mt-4 max-w-md text-lg leading-relaxed text-ink-muted">
+                  From an empty workspace to a shipped release, in four steps.
+                </p>
+              </Reveal>
 
-          <div className="mx-auto w-full max-w-2xl overflow-hidden">
-            <div
-              className="flex"
-              style={{ transform: `translateX(${trackTranslate}%)` }}
-            >
-              {steps.map((step, index) => (
-                <div key={step.title} className="w-full shrink-0 px-2">
-                  <StepCard index={index + 1} {...step} />
-                </div>
-              ))}
+              <Reveal delay={100} className="mt-10 flex flex-col gap-1">
+                {steps.map((step, index) => {
+                  const isActive = index === activeIndex
+                  return (
+                    <div key={step.title} className="flex items-center gap-3 py-2">
+                      <span
+                        className={cn(
+                          "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs font-medium transition-colors duration-300",
+                          isActive
+                            ? "border-accent bg-accent text-accent-ink"
+                            : "border-line-strong text-ink-muted",
+                        )}
+                      >
+                        {index + 1}
+                      </span>
+                      <span
+                        className={cn(
+                          "text-base font-medium transition-colors duration-300",
+                          isActive ? "text-ink" : "text-ink-muted",
+                        )}
+                      >
+                        {step.title}
+                      </span>
+                    </div>
+                  )
+                })}
+              </Reveal>
+
+              <p className="mt-6 min-h-12 max-w-sm text-base leading-relaxed text-ink-muted">
+                {activeStep.description}
+              </p>
             </div>
-          </div>
 
-          <div className="mx-auto mt-10 h-px w-full max-w-2xl bg-line">
-            <div className="h-px bg-accent" style={{ width: `${progress * 100}%` }} />
+            <HowItWorksPreview activeIndex={activeIndex} />
           </div>
         </div>
       </div>
