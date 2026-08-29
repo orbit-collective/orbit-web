@@ -13,7 +13,7 @@ export function DownloadHero() {
           issue on infrastructure you control, not someone else&apos;s.
         </p>
         <div className="mt-10">
-          <Button size="md">Download latest release</Button>
+          <Button size="md" href={"https://github.com/orbit-collective/orbit/releases/latest"}>Download latest release</Button>
         </div>
       </Reveal>
     </section>

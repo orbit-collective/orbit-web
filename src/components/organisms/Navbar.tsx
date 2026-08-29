@@ -8,12 +8,9 @@ import { NavLink } from "../molecules/NavLink"
 import { cn } from "../../lib/cn"
 
 const navItems = [
-  { key: "features", href: "/#features", label: "Features" },
-  { key: "how-it-works", href: "/#how-it-works", label: "How it works" },
-  { key: "workflow", href: "/#workflow", label: "Workflow" },
-  { key: "learn", href: "/#learn", label: "Learn" },
+  // { key: "learn", href: "/#learn", label: "Learn" },
   { key: "about", href: "/about", label: "About" },
-  { key: "docs", href: "#", label: "Docs", icon: ExternalLink, external: true },
+  { key: "docs", href: "https://orbit-dev.app", label: "Docs", icon: ExternalLink, external: true },
 ]
 
 export function Navbar() {
