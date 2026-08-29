@@ -31,7 +31,7 @@ export function Workflow() {
   )
 
   return (
-    <section id="workflow" className="border-t border-line">
+    <section id="workflow" className="scroll-mt-16 border-t border-line">
       <div ref={ref} style={{ height: `${views.length * 100}svh` }} className="relative">
         <div className="sticky top-0 flex h-svh items-center overflow-hidden px-6">
           <div className="mx-auto grid w-full max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-16">

@@ -1,9 +1,12 @@
 import { CallToAction } from "../organisms/CallToAction"
+import { DeepDive } from "../organisms/DeepDive"
 import { Features } from "../organisms/Features"
 import { Footer } from "../organisms/Footer"
 import { Hero } from "../organisms/Hero"
+import { HowItWorks } from "../organisms/HowItWorks"
 import { Learn } from "../organisms/Learn"
 import { Navbar } from "../organisms/Navbar"
+import { Stats } from "../organisms/Stats"
 import { Workflow } from "../organisms/Workflow"
 
 export function LandingTemplate() {
@@ -12,10 +15,13 @@ export function LandingTemplate() {
       <Navbar />
       <main>
         <Hero />
+        <Stats />
         <Features />
+        <HowItWorks />
         <Workflow />
+        <DeepDive />
         <Learn />
-        <CallToAction />
+        <CallToAction buttonHref="/download" />
       </main>
       <Footer />
     </div>

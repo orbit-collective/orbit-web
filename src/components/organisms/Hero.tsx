@@ -22,10 +22,10 @@ export function Hero() {
         </Reveal>
         <Reveal delay={200}>
           <div className="mt-10 flex flex-wrap items-center gap-4">
-            <Button href="#cta" size="md">
-              Get started
+            <Button href="/download" size="md">
+              Download Orbit
             </Button>
-            <Button href="#features" variant="secondary" size="md">
+            <Button href="/#features" variant="secondary" size="md">
               Explore features
             </Button>
           </div>

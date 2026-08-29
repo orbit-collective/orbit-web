@@ -1,4 +1,5 @@
-import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react"
+import type { ButtonHTMLAttributes, ReactNode } from "react"
+import { Link } from "react-router-dom"
 import { cn } from "../../lib/cn"
 
 type Variant = "primary" | "secondary" | "ghost"
@@ -21,18 +22,14 @@ const sizeClasses: Record<Size, string> = {
 const baseClasses =
   "inline-flex items-center justify-center rounded-md font-medium transition-colors duration-150 ease-in-out disabled:opacity-50 disabled:pointer-events-none"
 
-interface CommonProps {
+interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onClick"> {
   variant?: Variant
   size?: Size
   className?: string
   children?: ReactNode
+  href?: string
+  onClick?: () => void
 }
-
-type ButtonProps = CommonProps &
-  ButtonHTMLAttributes<HTMLButtonElement> & { href?: undefined }
-
-type AnchorProps = CommonProps &
-  AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }
 
 export function Button({
   variant = "primary",
@@ -40,19 +37,16 @@ export function Button({
   className,
   children,
   href,
+  onClick,
   ...props
-}: ButtonProps | AnchorProps) {
+}: ButtonProps) {
   const classes = cn(baseClasses, variantClasses[variant], sizeClasses[size], className)
 
-  if (href !== undefined) {
+  if (href) {
     return (
-      <a
-        href={href}
-        className={classes}
-        {...(props as AnchorHTMLAttributes<HTMLAnchorElement>)}
-      >
+      <Link to={href} className={classes} onClick={onClick}>
         {children}
-      </a>
+      </Link>
     )
   }
 
@@ -60,6 +54,7 @@ export function Button({
     <button
       type="button"
       className={classes}
+      onClick={onClick}
       {...(props as ButtonHTMLAttributes<HTMLButtonElement>)}
     >
       {children}

@@ -22,7 +22,7 @@ const resources = [
 
 export function Learn() {
   return (
-    <section id="learn" className="border-t border-line px-6 py-20 md:py-28">
+    <section id="learn" className="scroll-mt-16 border-t border-line px-6 py-20 md:py-28">
       <div className="mx-auto max-w-6xl">
         <Reveal className="max-w-2xl">
           <h2 className="text-3xl font-semibold tracking-tight text-ink">

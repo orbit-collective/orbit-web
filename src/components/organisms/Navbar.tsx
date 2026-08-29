@@ -1,5 +1,6 @@
 import { ExternalLink, Menu, X } from "lucide-react"
 import { useState } from "react"
+import { Link } from "react-router-dom"
 import { Button } from "../atoms/Button"
 import { IconButton } from "../atoms/IconButton"
 import { Logo } from "../atoms/Logo"
@@ -7,9 +8,11 @@ import { NavLink } from "../molecules/NavLink"
 import { cn } from "../../lib/cn"
 
 const navItems = [
-  { key: "features", href: "#features", label: "Features" },
-  { key: "workflow", href: "#workflow", label: "Workflow" },
-  { key: "learn", href: "#learn", label: "Learn" },
+  { key: "features", href: "/#features", label: "Features" },
+  { key: "how-it-works", href: "/#how-it-works", label: "How it works" },
+  { key: "workflow", href: "/#workflow", label: "Workflow" },
+  { key: "learn", href: "/#learn", label: "Learn" },
+  { key: "about", href: "/about", label: "About" },
   { key: "docs", href: "#", label: "Docs", icon: ExternalLink, external: true },
 ]
 
@@ -19,11 +22,11 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-canvas/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        <a href="/" className="shrink-0">
+        <Link to="/" className="shrink-0">
           <Logo />
-        </a>
+        </Link>
 
-        <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
           {navItems.map((item) => (
             <NavLink key={item.key} href={item.href} icon={item.icon} external={item.external}>
               {item.label}
@@ -32,8 +35,8 @@ export function Navbar() {
         </nav>
 
         <div className="hidden md:block">
-          <Button href="#cta" size="sm">
-            Get started
+          <Button href="/download" size="sm">
+            Download
           </Button>
         </div>
 
@@ -41,7 +44,7 @@ export function Navbar() {
           label={isMenuOpen ? "Close menu" : "Open menu"}
           aria-expanded={isMenuOpen}
           aria-controls="mobile-menu"
-          className="md:hidden"
+          className="lg:hidden"
           onClick={() => setIsMenuOpen((open) => !open)}
         >
           {isMenuOpen ? (
@@ -57,7 +60,7 @@ export function Navbar() {
         aria-label="Primary"
         inert={!isMenuOpen}
         className={cn(
-          "grid transition-[grid-template-rows] duration-300 ease-in-out md:hidden",
+          "grid transition-[grid-template-rows] duration-300 ease-in-out lg:hidden",
           isMenuOpen ? "grid-rows-[1fr] border-t border-line" : "grid-rows-[0fr]",
         )}
       >
@@ -75,8 +78,8 @@ export function Navbar() {
                 {item.label}
               </NavLink>
             ))}
-            <Button href="#cta" className="mt-2" onClick={() => setIsMenuOpen(false)}>
-              Get started
+            <Button href="/download" className="mt-2" onClick={() => setIsMenuOpen(false)}>
+              Download
             </Button>
           </div>
         </div>

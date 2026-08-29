@@ -1,4 +1,4 @@
-import { Activity, Bell, LayoutDashboard, ListChecks, Shield, Users } from "lucide-react"
+import { Bell, LayoutDashboard, ListChecks, Tag } from "lucide-react"
 import { Reveal } from "../atoms/Reveal"
 import { FeatureCard } from "../molecules/FeatureCard"
 
@@ -7,7 +7,7 @@ const features = [
     icon: ListChecks,
     title: "Issue tracking",
     description:
-      "Create issues, set status, priority, labels, assignees and dates, then move them through a workflow that fits your team.",
+      "Create issues, set status, priority, assignees and dates, then move them through a workflow that fits your team.",
   },
   {
     icon: LayoutDashboard,
@@ -16,10 +16,10 @@ const features = [
       "See how every project is progressing at a glance, with analytics built from the issues your team is already tracking.",
   },
   {
-    icon: Users,
-    title: "Project roles",
+    icon: Tag,
+    title: "Labels & priority",
     description:
-      "Grant project scoped permissions so every teammate sees exactly the projects and actions relevant to them.",
+      "Tag every issue with the labels and priority that matter to your team, so nothing important gets lost in the noise.",
   },
   {
     icon: Bell,
@@ -27,23 +27,11 @@ const features = [
     description:
       "Get notified when an issue moves, a comment lands, or a project you follow changes state.",
   },
-  {
-    icon: Activity,
-    title: "Activity log",
-    description:
-      "Every change is recorded, so you can trace the full history of an issue or a project at any time.",
-  },
-  {
-    icon: Shield,
-    title: "Saved filters",
-    description:
-      "Save the filters your team checks every day and get back to them in one click, across list, board or calendar.",
-  },
 ]
 
 export function Features() {
   return (
-    <section id="features" className="border-t border-line px-6 py-20 md:py-28">
+    <section id="features" className="scroll-mt-16 border-t border-line px-6 py-20 md:py-28">
       <div className="mx-auto max-w-6xl">
         <Reveal className="max-w-2xl">
           <h2 className="text-3xl font-semibold tracking-tight text-ink">
@@ -55,7 +43,7 @@ export function Features() {
           </p>
         </Reveal>
 
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, index) => (
             <Reveal key={feature.title} delay={index * 80}>
               <FeatureCard {...feature} />
