@@ -2,6 +2,7 @@ import { Filter, History, MessagesSquare, Users } from "lucide-react"
 import { useMemo } from "react"
 import { useScrollProgress } from "../../hooks/useScrollProgress"
 import { cn } from "../../lib/cn"
+import { DeepDivePreview } from "./DeepDivePreview"
 
 const chapters = [
   {
@@ -49,47 +50,44 @@ export function DeepDive() {
       >
         <div className="mx-auto grid max-w-6xl gap-4 px-6 md:grid-cols-2 md:gap-16">
           <div className="sticky top-0 flex h-svh items-center justify-center">
-            <div className="relative flex h-56 w-56 shrink-0 items-center justify-center rounded-full border border-line-strong bg-canvas-hover sm:h-64 sm:w-64">
-              {chapters.map((chapter, index) => {
-                const isActive = index === activeIndex
-                return (
-                  <div
-                    key={chapter.title}
-                    aria-hidden={!isActive}
-                    className={cn(
-                      "absolute inset-0 flex flex-col items-center justify-center gap-3 transition-opacity duration-500 ease-out",
-                      isActive ? "opacity-100" : "opacity-0",
-                    )}
-                  >
-                    <chapter.icon className="h-9 w-9 text-ink" strokeWidth={1.5} aria-hidden="true" />
-                    <span className="text-sm font-medium text-ink-muted">{chapter.title}</span>
-                  </div>
-                )
-              })}
-            </div>
+            <DeepDivePreview activeIndex={activeIndex} />
           </div>
 
           <div>
-            {chapters.map((chapter, index) => (
-              <div
-                key={chapter.title}
-                style={{ height: `${CHAPTER_HEIGHT_VH}svh` }}
-                className={cn(
-                  "flex flex-col justify-center transition-opacity duration-500 ease-out",
-                  index === activeIndex ? "opacity-100" : "opacity-35",
-                )}
-              >
-                <span className="text-sm font-medium text-ink-muted">
-                  0{index + 1} / 0{chapters.length}
-                </span>
-                <h3 className="mt-2 text-2xl font-semibold tracking-tight text-ink">
-                  {chapter.title}
-                </h3>
-                <p className="mt-3 max-w-md text-base leading-relaxed text-ink-muted">
-                  {chapter.description}
-                </p>
-              </div>
-            ))}
+            {chapters.map((chapter, index) => {
+              const isActive = index === activeIndex
+              return (
+                <div
+                  key={chapter.title}
+                  style={{ height: `${CHAPTER_HEIGHT_VH}svh` }}
+                  className={cn(
+                    "flex flex-col justify-center transition-opacity duration-500 ease-out",
+                    isActive ? "opacity-100" : "opacity-35",
+                  )}
+                >
+                  <div className="flex items-center gap-1.5">
+                    {chapters.map((_, segmentIndex) => (
+                      <span
+                        key={segmentIndex}
+                        className={cn(
+                          "h-1 w-8 rounded-full transition-colors duration-300",
+                          segmentIndex <= index ? "bg-accent" : "bg-line",
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <div className="mt-5 inline-flex h-10 w-10 items-center justify-center rounded-md border border-line text-ink">
+                    <chapter.icon className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
+                  </div>
+                  <h3 className="mt-4 text-2xl font-semibold tracking-tight text-ink">
+                    {chapter.title}
+                  </h3>
+                  <p className="mt-3 max-w-md text-base leading-relaxed text-ink-muted">
+                    {chapter.description}
+                  </p>
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>

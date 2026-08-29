@@ -1,5 +1,7 @@
 import { Bug, Palette, Sparkle } from "lucide-react"
 import { cn } from "../../lib/cn"
+import { mockPanelClass } from "../../lib/mockPanel"
+import { MockupFrame } from "../atoms/MockupFrame"
 import { MockIssueCard } from "../molecules/MockIssueCard"
 
 interface HowItWorksPreviewProps {
@@ -32,24 +34,11 @@ const dashboardStats = [
 
 const chartBars = [40, 70, 55, 90, 65]
 
-function panelClasses(isActive: boolean) {
-  return cn(
-    "absolute inset-0 flex flex-col justify-center transition-all duration-500 ease-out",
-    isActive ? "scale-100 opacity-100" : "pointer-events-none scale-95 opacity-0",
-  )
-}
-
 export function HowItWorksPreview({ activeIndex }: HowItWorksPreviewProps) {
   return (
-    <div className="mx-auto w-full max-w-md overflow-hidden rounded-xl border border-line bg-surface sm:max-w-lg">
-      <div className="flex items-center gap-1.5 border-b border-line px-4 py-3">
-        <span className="h-2.5 w-2.5 rounded-full border border-line-strong" />
-        <span className="h-2.5 w-2.5 rounded-full border border-line-strong" />
-        <span className="h-2.5 w-2.5 rounded-full border border-line-strong" />
-      </div>
-
+    <MockupFrame className="mx-auto w-full max-w-md sm:max-w-lg">
       <div className="relative h-64 sm:h-72">
-        <div aria-hidden={activeIndex !== 0} className={panelClasses(activeIndex === 0)}>
+        <div aria-hidden={activeIndex !== 0} className={mockPanelClass(activeIndex === 0)}>
           <div className="flex flex-col items-center gap-4 px-6">
             <div className="flex w-full max-w-xs items-center gap-3 rounded-md border border-line-strong bg-canvas-hover px-4 py-3">
               <span className="h-3 w-3 shrink-0 rounded-full bg-accent" />
@@ -64,7 +53,7 @@ export function HowItWorksPreview({ activeIndex }: HowItWorksPreviewProps) {
           </div>
         </div>
 
-        <div aria-hidden={activeIndex !== 1} className={panelClasses(activeIndex === 1)}>
+        <div aria-hidden={activeIndex !== 1} className={mockPanelClass(activeIndex === 1)}>
           <div className="flex flex-col gap-2.5 px-6">
             {listRows.map((row, index) => (
               <div
@@ -83,7 +72,7 @@ export function HowItWorksPreview({ activeIndex }: HowItWorksPreviewProps) {
           </div>
         </div>
 
-        <div aria-hidden={activeIndex !== 2} className={panelClasses(activeIndex === 2)}>
+        <div aria-hidden={activeIndex !== 2} className={mockPanelClass(activeIndex === 2)}>
           <div className="grid grid-cols-3 gap-3 px-4">
             {boardColumns.map((column) => (
               <div key={column.title}>
@@ -98,7 +87,7 @@ export function HowItWorksPreview({ activeIndex }: HowItWorksPreviewProps) {
           </div>
         </div>
 
-        <div aria-hidden={activeIndex !== 3} className={panelClasses(activeIndex === 3)}>
+        <div aria-hidden={activeIndex !== 3} className={mockPanelClass(activeIndex === 3)}>
           <div className="flex flex-col gap-6 px-6">
             <div className="grid grid-cols-3 gap-3">
               {dashboardStats.map((stat) => (
@@ -126,6 +115,6 @@ export function HowItWorksPreview({ activeIndex }: HowItWorksPreviewProps) {
           </div>
         </div>
       </div>
-    </div>
+    </MockupFrame>
   )
 }
