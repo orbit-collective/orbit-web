@@ -12,7 +12,7 @@ export function FeatureCard({ icon: Icon, title, description, className }: Featu
   return (
     <div
       className={cn(
-        "rounded-lg border border-line bg-surface p-5 transition-colors duration-150 ease-in-out hover:border-line-strong",
+        "flex h-full flex-col rounded-lg border border-line bg-surface p-5 transition-colors duration-150 ease-in-out hover:border-line-strong",
         className,
       )}
     >
