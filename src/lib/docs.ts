@@ -132,3 +132,36 @@ export function getCategory(lang: string, categorySlug: string): DocCategory | u
 export function getGuide(lang: string, categorySlug: string, slug: string): DocGuide | undefined {
   return getCategory(lang, categorySlug)?.guides.find((guide) => guide.slug === slug)
 }
+
+export interface DocPageRef {
+  title: string
+  href: string
+}
+
+function getFlatPages(lang: string): DocPageRef[] {
+  const langIndex = getLangIndex(lang)
+  if (!langIndex) return []
+
+  const pages: DocPageRef[] = [{ title: langIndex.title, href: `/learn/${lang}` }]
+
+  for (const category of langIndex.categories) {
+    pages.push({ title: category.title, href: `/learn/${lang}/${category.slug}` })
+    for (const guide of category.guides) {
+      pages.push({ title: guide.title, href: `/learn/${lang}/${category.slug}/${guide.slug}` })
+    }
+  }
+
+  return pages
+}
+
+export interface DocAdjacentPages {
+  previous?: DocPageRef
+  next?: DocPageRef
+}
+
+export function getAdjacentPages(lang: string, currentHref: string): DocAdjacentPages {
+  const pages = getFlatPages(lang)
+  const index = pages.findIndex((page) => page.href === currentHref)
+  if (index === -1) return {}
+  return { previous: pages[index - 1], next: pages[index + 1] }
+}

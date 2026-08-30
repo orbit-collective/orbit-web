@@ -58,6 +58,10 @@
   --tw-prose-td-borders: var(--color-line);
 }
 
+.prose {
+  overflow-wrap: anywhere;
+}
+
 .prose a {
   text-decoration-color: var(--color-line-strong);
   text-underline-offset: 2px;
@@ -74,6 +78,7 @@
   border-radius: 0.25rem;
   padding: 0.125rem 0.375rem;
   font-weight: 400;
+  overflow-wrap: anywhere;
 }
 
 .prose pre {
