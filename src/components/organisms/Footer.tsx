@@ -15,7 +15,7 @@ export function Footer() {
           <NavLink href="/learn">Learn</NavLink>
           <NavLink href="/about">About</NavLink>
           <NavLink href="/download">Download</NavLink>
-          <NavLink href="#" icon={ExternalLink} external>
+          <NavLink href="https://docs.orbit-dev.app" icon={ExternalLink} external>
             Docs
           </NavLink>
         </nav>
