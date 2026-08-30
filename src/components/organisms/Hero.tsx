@@ -25,8 +25,8 @@ export function Hero() {
             <Button href="/download" size="md">
               Download Orbit
             </Button>
-            <Button href="/#features" variant="secondary" size="md">
-              Explore features
+            <Button href="/about" variant="secondary" size="md">
+              Read more
             </Button>
           </div>
         </Reveal>

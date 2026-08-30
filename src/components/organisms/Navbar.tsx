@@ -41,7 +41,7 @@ export function Navbar() {
           label={isMenuOpen ? "Close menu" : "Open menu"}
           aria-expanded={isMenuOpen}
           aria-controls="mobile-menu"
-          className="lg:hidden"
+          className="lg:hidden cursor-pointer"
           onClick={() => setIsMenuOpen((open) => !open)}
         >
           {isMenuOpen ? (
