@@ -8,7 +8,7 @@ import { NavLink } from "../molecules/NavLink"
 import { cn } from "../../lib/cn"
 
 const navItems = [
-  // { key: "learn", href: "/#learn", label: "Learn" },
+  { key: "learn", href: "/learn", label: "Learn" },
   { key: "about", href: "/about", label: "About" },
   { key: "docs", href: "https://orbit-dev.app", label: "Docs", icon: ExternalLink, external: true },
 ]

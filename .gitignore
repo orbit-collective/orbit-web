@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Fetched at build time from the orbit repo's documentation/ folder, see scripts/fetch-docs.mjs
+src/content/docs
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
