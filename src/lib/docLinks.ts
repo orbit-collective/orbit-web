@@ -1,8 +1,13 @@
 const DOCS_ORIGIN = "https://docs.local"
-const GITHUB_DOCS_BASE = "https://github.com/orbit-collective/orbit/blob/master/documentation"
+export const GITHUB_DOCS_BASE = "https://github.com/orbit-collective/orbit/blob/master/documentation"
 
 export function isExternalDocLink(href: string): boolean {
   return /^([a-z][a-z0-9+.-]*:)?\/\//i.test(href) || href.startsWith("mailto:")
+}
+
+export function buildGithubUrl(lang: string, category: string | undefined, filename: string): string {
+  const segments = category ? [lang, category, filename] : [lang, filename]
+  return `${GITHUB_DOCS_BASE}/${segments.join("/")}`
 }
 
 interface ResolveDocLinkParams {

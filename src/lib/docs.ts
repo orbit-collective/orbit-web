@@ -1,3 +1,5 @@
+import { buildGithubUrl } from "./docLinks"
+
 export interface DocGuide {
   slug: string
   title: string
@@ -6,6 +8,7 @@ export interface DocGuide {
   content: string
   category: string
   lang: string
+  githubUrl: string
 }
 
 export interface DocCategory {
@@ -20,6 +23,7 @@ export interface DocLang {
   title: string
   description: string
   content: string
+  githubUrl: string
   categories: DocCategory[]
 }
 
@@ -105,6 +109,7 @@ for (const [path, content] of Object.entries(files)) {
         content,
         category,
         lang,
+        githubUrl: buildGithubUrl(lang, category, filename),
       }
     } else {
       const { slug, order } = parseFilename(filename)
@@ -116,6 +121,7 @@ for (const [path, content] of Object.entries(files)) {
         content,
         category,
         lang,
+        githubUrl: buildGithubUrl(lang, category, filename),
       })
     }
 
@@ -130,6 +136,7 @@ const docsTree: DocLang[] = Array.from(langDrafts.entries())
     title: extractTitle(draft.readmeContent, lang),
     description: extractDescription(draft.readmeContent),
     content: draft.readmeContent,
+    githubUrl: buildGithubUrl(lang, undefined, "README.md"),
     categories: Array.from(draft.categories.values())
       .filter((category): category is CategoryDraft & { readme: DocGuide } => category.readme !== undefined)
       .map((category) => ({

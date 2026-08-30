@@ -45,7 +45,7 @@ export function LearnPage() {
           ])}
         />
         <DocsTemplate lang={lang}>
-          <DocsContent lang={lang} content={langIndex.content} />
+          <DocsContent lang={lang} content={langIndex.content} githubUrl={langIndex.githubUrl} />
         </DocsTemplate>
       </>
     )
@@ -76,6 +76,7 @@ export function LearnPage() {
             category={category}
             eyebrow={categoryData.title}
             content={categoryData.readme.content}
+            githubUrl={categoryData.readme.githubUrl}
           />
         </DocsTemplate>
       </>
@@ -102,7 +103,13 @@ export function LearnPage() {
         ])}
       />
       <DocsTemplate lang={lang} activeCategory={category} activeSlug={slug}>
-        <DocsContent lang={lang} category={category} eyebrow={categoryData.title} content={guide.content} />
+        <DocsContent
+          lang={lang}
+          category={category}
+          eyebrow={categoryData.title}
+          content={guide.content}
+          githubUrl={guide.githubUrl}
+        />
       </DocsTemplate>
     </>
   )
