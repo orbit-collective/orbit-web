@@ -1,10 +1,20 @@
+import { useLocation } from "react-router-dom"
+import { Seo } from "../components/atoms/Seo"
 import { Button } from "../components/atoms/Button"
 import { Footer } from "../components/organisms/Footer"
 import { Navbar } from "../components/organisms/Navbar"
 
 export function NotFoundPage() {
+  const { pathname } = useLocation()
+
   return (
     <div className="flex min-h-screen flex-col bg-canvas">
+      <Seo
+        title="Page not found · Orbit"
+        description="The page you're looking for doesn't exist or has moved."
+        path={pathname}
+        noindex
+      />
       <Navbar />
       <main className="flex flex-1 flex-col items-center justify-center px-6 py-20 text-center">
         <p className="text-sm font-medium text-ink-muted">404</p>

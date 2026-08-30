@@ -1,11 +1,6 @@
-import { lazy, Suspense, useEffect } from "react"
-import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom"
-import { AboutPage } from "./pages/AboutPage"
-import { DownloadPage } from "./pages/DownloadPage"
-import { HomePage } from "./pages/HomePage"
-import { NotFoundPage } from "./pages/NotFoundPage"
-
-const LearnPage = lazy(() => import("./pages/LearnPage").then((module) => ({ default: module.LearnPage })))
+import { Suspense, useEffect } from "react"
+import { BrowserRouter, useLocation } from "react-router-dom"
+import { AppRoutes } from "./routes"
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
@@ -23,16 +18,7 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <Suspense fallback={null}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/download" element={<DownloadPage />} />
-          <Route path="/learn" element={<Navigate to="/learn/en" replace />} />
-          <Route path="/learn/:lang" element={<LearnPage />} />
-          <Route path="/learn/:lang/:category" element={<LearnPage />} />
-          <Route path="/learn/:lang/:category/:slug" element={<LearnPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+        <AppRoutes />
       </Suspense>
     </BrowserRouter>
   )

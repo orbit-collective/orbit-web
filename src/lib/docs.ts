@@ -1,6 +1,7 @@
 export interface DocGuide {
   slug: string
   title: string
+  description: string
   order: number
   content: string
   category: string
@@ -17,6 +18,7 @@ export interface DocCategory {
 export interface DocLang {
   lang: string
   title: string
+  description: string
   content: string
   categories: DocCategory[]
 }
@@ -30,6 +32,26 @@ const files = import.meta.glob("/src/content/docs/**/*.md", {
 function extractTitle(content: string, fallback: string): string {
   const match = content.match(/^#\s+(.+)$/m)
   return match ? match[1].trim() : fallback
+}
+
+const MAX_DESCRIPTION_LENGTH = 155
+
+function extractDescription(content: string): string {
+  const withoutH1 = content.replace(/^#\s+.+$/m, "")
+  const paragraphs = withoutH1
+    .split(/\n\s*\n/)
+    .map((paragraph) => paragraph.trim())
+    .filter((paragraph) => paragraph.length > 0 && !paragraph.startsWith("#"))
+
+  const plain = (paragraphs[0] ?? "")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/[*_`]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+
+  return plain.length > MAX_DESCRIPTION_LENGTH
+    ? `${plain.slice(0, MAX_DESCRIPTION_LENGTH).trimEnd()}…`
+    : plain
 }
 
 function parseFilename(filename: string): { slug: string; order: number } {
@@ -78,6 +100,7 @@ for (const [path, content] of Object.entries(files)) {
       categoryDraft.readme = {
         slug: "README",
         title: extractTitle(content, category),
+        description: extractDescription(content),
         order: 0,
         content,
         category,
@@ -88,6 +111,7 @@ for (const [path, content] of Object.entries(files)) {
       categoryDraft.guides.push({
         slug,
         title: extractTitle(content, slug),
+        description: extractDescription(content),
         order,
         content,
         category,
@@ -104,6 +128,7 @@ const docsTree: DocLang[] = Array.from(langDrafts.entries())
   .map(([lang, draft]) => ({
     lang,
     title: extractTitle(draft.readmeContent, lang),
+    description: extractDescription(draft.readmeContent),
     content: draft.readmeContent,
     categories: Array.from(draft.categories.values())
       .filter((category): category is CategoryDraft & { readme: DocGuide } => category.readme !== undefined)
@@ -133,12 +158,40 @@ export function getGuide(lang: string, categorySlug: string, slug: string): DocG
   return getCategory(lang, categorySlug)?.guides.find((guide) => guide.slug === slug)
 }
 
+export function getAvailableLangs(): string[] {
+  return docsTree.map((entry) => entry.lang)
+}
+
+export interface DocAlternatePath {
+  lang: string
+  path: string
+}
+
+export function getAlternatePaths(category?: string, slug?: string): DocAlternatePath[] {
+  return getAvailableLangs()
+    .filter((lang) => {
+      if (!category) return true
+      const categoryData = getCategory(lang, category)
+      if (!categoryData) return false
+      if (!slug) return true
+      return categoryData.guides.some((guide) => guide.slug === slug)
+    })
+    .map((lang) => ({
+      lang,
+      path: slug
+        ? `/learn/${lang}/${category}/${slug}`
+        : category
+          ? `/learn/${lang}/${category}`
+          : `/learn/${lang}`,
+    }))
+}
+
 export interface DocPageRef {
   title: string
   href: string
 }
 
-function getFlatPages(lang: string): DocPageRef[] {
+export function getFlatPages(lang: string): DocPageRef[] {
   const langIndex = getLangIndex(lang)
   if (!langIndex) return []
 
