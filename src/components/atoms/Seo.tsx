@@ -2,7 +2,7 @@ import { useEffect } from "react"
 
 export const SITE_URL = "https://orbit-dev.app"
 const SITE_NAME = "Orbit"
-const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`
+const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg`
 
 interface Alternate {
   lang: string
