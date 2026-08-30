@@ -62,6 +62,17 @@
   overflow-wrap: anywhere;
 }
 
+.prose th,
+.prose td {
+  overflow-wrap: normal;
+  white-space: nowrap;
+}
+
+.prose table {
+  display: block;
+  overflow-x: auto;
+}
+
 .prose a {
   text-decoration-color: var(--color-line-strong);
   text-underline-offset: 2px;
