@@ -74,7 +74,7 @@ export function DownloadPlatforms() {
                 https://github.com/orbit-collective/orbit.git
               </p>
               <p className="text-ink-muted">
-                <span className="text-accent">$</span> docker compose up -d
+                <span className="text-accent">$</span> make up
               </p>
               <p className="text-ink-muted">Starting orbit_app ... done</p>
             </div>
