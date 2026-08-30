@@ -12,9 +12,7 @@ export function Footer() {
         </Link>
 
         <nav className="flex flex-wrap items-center justify-center gap-6" aria-label="Footer">
-          <NavLink href="/#features">Features</NavLink>
-          <NavLink href="/#workflow">Workflow</NavLink>
-          <NavLink href="/#learn">Learn</NavLink>
+          {/*<NavLink href="/#learn">Learn</NavLink>*/}
           <NavLink href="/about">About</NavLink>
           <NavLink href="/download">Download</NavLink>
           <NavLink href="#" icon={ExternalLink} external>
