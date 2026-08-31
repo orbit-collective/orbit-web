@@ -1,15 +1,10 @@
-import bash from "highlight.js/lib/languages/bash"
-import php from "highlight.js/lib/languages/php"
-import typescript from "highlight.js/lib/languages/typescript"
 import type { AnchorHTMLAttributes, ReactNode } from "react"
 import ReactMarkdown from "react-markdown"
 import { Link } from "react-router-dom"
-import rehypeHighlight from "rehype-highlight"
 import remarkGfm from "remark-gfm"
 import { isExternalDocLink, resolveDocLink } from "../../lib/docLinks"
+import { rehypePrism } from "../../lib/prism"
 import { ViewOnGithubLink } from "../molecules/ViewOnGithubLink"
-
-const HIGHLIGHT_LANGUAGES = { bash, php, ts: typescript, tsx: typescript }
 
 interface DocAnchorProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   lang: string
@@ -58,7 +53,7 @@ export function DocsContent({ lang, category, eyebrow, githubUrl, content }: Doc
       ) : null}
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
-        rehypePlugins={[[rehypeHighlight, { languages: HIGHLIGHT_LANGUAGES, ignoreMissing: true }]]}
+        rehypePlugins={[[rehypePrism, { ignoreMissing: true }]]}
         components={{
           a: (props) => <DocAnchor {...props} lang={lang} category={category} />,
         }}
