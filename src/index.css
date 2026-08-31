@@ -111,34 +111,68 @@
 .prose pre code .hljs-selector-tag,
 .prose pre code .hljs-literal,
 .prose pre code .hljs-section,
-.prose pre code .hljs-link {
-  color: var(--color-ink);
-  font-weight: 600;
+.prose pre code .hljs-doctag,
+.prose pre code .hljs-formula {
+  color: #c586c0;
 }
 
 .prose pre code .hljs-string,
-.prose pre code .hljs-attr,
+.prose pre code .hljs-regexp,
 .prose pre code .hljs-symbol,
 .prose pre code .hljs-bullet,
 .prose pre code .hljs-addition {
-  color: var(--color-accent);
-}
-
-.prose pre code .hljs-title,
-.prose pre code .hljs-name,
-.prose pre code .hljs-type,
-.prose pre code .hljs-built_in,
-.prose pre code .hljs-class .hljs-title {
-  color: var(--color-ink);
+  color: #9fd88a;
 }
 
 .prose pre code .hljs-number,
-.prose pre code .hljs-meta,
+.prose pre code .hljs-literal.number {
+  color: #d19a66;
+}
+
+.prose pre code .hljs-title,
+.prose pre code .hljs-title.function_,
+.prose pre code .hljs-title.class_,
+.prose pre code .hljs-section .hljs-title {
+  color: #61afef;
+}
+
+.prose pre code .hljs-built_in,
+.prose pre code .hljs-builtin-name,
+.prose pre code .hljs-type {
+  color: #56b6c2;
+}
+
+.prose pre code .hljs-attr,
+.prose pre code .hljs-attribute,
+.prose pre code .hljs-property,
+.prose pre code .hljs-tag .hljs-name,
+.prose pre code .hljs-selector-class,
+.prose pre code .hljs-selector-id {
+  color: #e5c07b;
+}
+
+.prose pre code .hljs-subst {
+  color: var(--tw-prose-pre-code);
+}
+
 .prose pre code .hljs-variable,
 .prose pre code .hljs-template-variable,
-.prose pre code .hljs-attribute,
+.prose pre code .hljs-link,
 .prose pre code .hljs-deletion {
+  color: #e06c75;
+}
+
+.prose pre code .hljs-meta,
+.prose pre code .hljs-tag {
   color: var(--color-ink-muted);
+}
+
+.prose pre code .hljs-emphasis {
+  font-style: italic;
+}
+
+.prose pre code .hljs-strong {
+  font-weight: 700;
 }
 
 * {
