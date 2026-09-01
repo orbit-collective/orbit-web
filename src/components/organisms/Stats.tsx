@@ -2,7 +2,7 @@ import { Reveal } from "../atoms/Reveal"
 import { StatItem } from "../molecules/StatItem"
 
 const stats = [
-  { value: 3, label: "Views: List, Board and Calendar" },
+  { value: 4, label: "Views: List, Board, Calendar and Activity" },
   { value: 100, suffix: "%", label: "Self-hosted on your own infrastructure" },
   { value: 1, label: "Workspace for planning, tracking and reporting" },
 ]

@@ -1,4 +1,4 @@
-import { Calendar, Kanban, List } from "lucide-react"
+import { Calendar, Kanban, List, Activity } from "lucide-react"
 import { useMemo } from "react"
 import { useScrollProgress } from "../../hooks/useScrollProgress"
 import { cn } from "../../lib/cn"
@@ -20,6 +20,11 @@ const views = [
     title: "Calendar",
     description: "Lay issues out against their dates to plan sprints and releases around deadlines.",
   },
+  {
+    icon: Activity,
+    title: "Activity Log",
+    description: "See every change to every issue in a single, filterable timeline.",
+  }
 ]
 
 export function Workflow() {
