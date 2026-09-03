@@ -161,6 +161,35 @@ export function getCategory(lang: string, categorySlug: string): DocCategory | u
   return getLangIndex(lang)?.categories.find((category) => category.slug === categorySlug)
 }
 
+export interface DocPreview {
+  eyebrow?: string
+  title: string
+  description: string
+}
+
+/** Given a resolved "/learn/..." route, looks up that page's title/description
+ * for the hover preview card on internal doc links. */
+export function getPreviewForPath(path: string): DocPreview | undefined {
+  const match = path.match(/^\/learn\/([a-z]{2})(?:\/([^/]+)(?:\/([^/]+))?)?$/)
+  if (!match) return undefined
+  const [, lang, category, slug] = match
+
+  if (!category) {
+    const langIndex = getLangIndex(lang)
+    return langIndex ? { title: langIndex.title, description: langIndex.description } : undefined
+  }
+
+  const categoryData = getCategory(lang, category)
+  if (!categoryData) return undefined
+
+  if (!slug) {
+    return { title: categoryData.title, description: categoryData.readme.description }
+  }
+
+  const guide = getGuide(lang, category, slug)
+  return guide ? { eyebrow: categoryData.title, title: guide.title, description: guide.description } : undefined
+}
+
 export function getGuide(lang: string, categorySlug: string, slug: string): DocGuide | undefined {
   return getCategory(lang, categorySlug)?.guides.find((guide) => guide.slug === slug)
 }

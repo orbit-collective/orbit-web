@@ -1,9 +1,12 @@
 import type { AnchorHTMLAttributes, ReactNode } from "react"
+import { useId } from "react"
 import ReactMarkdown from "react-markdown"
 import { Link } from "react-router-dom"
 import remarkGfm from "remark-gfm"
 import { isExternalDocLink, resolveDocLink } from "../../lib/docLinks"
+import { getPreviewForPath } from "../../lib/docs"
 import { rehypePrism } from "../../lib/prism"
+import { DocLinkPreviewCard } from "../molecules/DocLinkPreviewCard"
 import { ViewOnGithubLink } from "../molecules/ViewOnGithubLink"
 
 interface DocAnchorProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
@@ -13,6 +16,8 @@ interface DocAnchorProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 }
 
 function DocAnchor({ href, lang, category, children }: DocAnchorProps) {
+  const tooltipId = useId()
+
   if (!href || isExternalDocLink(href)) {
     return (
       <a href={href} target="_blank" rel="noopener noreferrer">
@@ -24,6 +29,19 @@ function DocAnchor({ href, lang, category, children }: DocAnchorProps) {
   const resolved = resolveDocLink({ href, lang, category, filename: "current.md" })
 
   if (resolved.startsWith("/learn")) {
+    const preview = getPreviewForPath(resolved)
+
+    if (preview) {
+      return (
+        <span className="group relative inline-block">
+          <Link to={resolved} aria-describedby={tooltipId}>
+            {children}
+          </Link>
+          <DocLinkPreviewCard id={tooltipId} {...preview} />
+        </span>
+      )
+    }
+
     return <Link to={resolved}>{children}</Link>
   }
 
