@@ -2,6 +2,7 @@ import type { AnchorHTMLAttributes, ReactNode } from "react"
 import { useId } from "react"
 import ReactMarkdown from "react-markdown"
 import { Link } from "react-router-dom"
+import rehypeSlug from "rehype-slug"
 import remarkGfm from "remark-gfm"
 import { isExternalDocLink, resolveDocLink } from "../../lib/docLinks"
 import { getPreviewForPath } from "../../lib/docs"
@@ -62,7 +63,7 @@ interface DocsContentProps {
 
 export function DocsContent({ lang, category, eyebrow, githubUrl, content }: DocsContentProps) {
   return (
-    <article className="prose max-w-none prose-headings:font-semibold prose-headings:tracking-tight">
+    <article className="prose max-w-none prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:tracking-tight">
       {eyebrow || githubUrl ? (
         <div className="mb-2 flex items-center justify-between gap-4 not-prose">
           {eyebrow ? <p className="text-sm font-medium text-ink-muted">{eyebrow}</p> : <span />}
@@ -71,7 +72,7 @@ export function DocsContent({ lang, category, eyebrow, githubUrl, content }: Doc
       ) : null}
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
-        rehypePlugins={[[rehypePrism, { ignoreMissing: true }]]}
+        rehypePlugins={[rehypeSlug, [rehypePrism, { ignoreMissing: true }]]}
         components={{
           a: (props) => <DocAnchor {...props} lang={lang} category={category} />,
         }}

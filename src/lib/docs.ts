@@ -1,4 +1,11 @@
+import GithubSlugger from "github-slugger"
 import { buildGithubUrl } from "./docLinks"
+
+export interface DocHeading {
+  depth: 2 | 3
+  text: string
+  slug: string
+}
 
 export interface DocGuide {
   slug: string
@@ -9,6 +16,7 @@ export interface DocGuide {
   category: string
   lang: string
   githubUrl: string
+  headings: DocHeading[]
 }
 
 export interface DocCategory {
@@ -24,6 +32,7 @@ export interface DocLang {
   description: string
   content: string
   githubUrl: string
+  headings: DocHeading[]
   categories: DocCategory[]
 }
 
@@ -56,6 +65,31 @@ function extractDescription(content: string): string {
   return plain.length > MAX_DESCRIPTION_LENGTH
     ? `${plain.slice(0, MAX_DESCRIPTION_LENGTH).trimEnd()}…`
     : plain
+}
+
+function stripInlineMarkdown(text: string): string {
+  return text
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/\*([^*]+)\*/g, "$1")
+    .replace(/_([^_]+)_/g, "$1")
+    .trim()
+}
+
+/** Mirrors rehype-slug (same github-slugger version) so these ids match the
+ * ones actually rendered onto <h2>/<h3> elements, for the "On this page" nav. */
+function extractHeadings(content: string): DocHeading[] {
+  const slugger = new GithubSlugger()
+  const headings: DocHeading[] = []
+  const regex = /^(#{2,3})\s+(.+)$/gm
+  let match: RegExpExecArray | null
+
+  while ((match = regex.exec(content)) !== null) {
+    const text = stripInlineMarkdown(match[2])
+    headings.push({ depth: match[1].length as 2 | 3, text, slug: slugger.slug(text) })
+  }
+
+  return headings
 }
 
 function parseFilename(filename: string): { slug: string; order: number } {
@@ -110,6 +144,7 @@ for (const [path, content] of Object.entries(files)) {
         category,
         lang,
         githubUrl: buildGithubUrl(lang, category, filename),
+        headings: extractHeadings(content),
       }
     } else {
       const { slug, order } = parseFilename(filename)
@@ -121,6 +156,7 @@ for (const [path, content] of Object.entries(files)) {
         content,
         category,
         lang,
+        headings: extractHeadings(content),
         githubUrl: buildGithubUrl(lang, category, filename),
       })
     }
@@ -137,6 +173,7 @@ const docsTree: DocLang[] = Array.from(langDrafts.entries())
     description: extractDescription(draft.readmeContent),
     content: draft.readmeContent,
     githubUrl: buildGithubUrl(lang, undefined, "README.md"),
+    headings: extractHeadings(draft.readmeContent),
     categories: Array.from(draft.categories.values())
       .filter((category): category is CategoryDraft & { readme: DocGuide } => category.readme !== undefined)
       .map((category) => ({
