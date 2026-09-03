@@ -28,6 +28,7 @@ interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onC
   className?: string
   children?: ReactNode
   href?: string
+  external?: boolean
   onClick?: () => void
 }
 
@@ -37,10 +38,19 @@ export function Button({
   className,
   children,
   href,
+  external,
   onClick,
   ...props
 }: ButtonProps) {
   const classes = cn(baseClasses, variantClasses[variant], sizeClasses[size], className)
+
+  if (href && external) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={classes} onClick={onClick}>
+        {children}
+      </a>
+    )
+  }
 
   if (href) {
     return (

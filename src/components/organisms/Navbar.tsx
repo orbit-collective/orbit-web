@@ -6,12 +6,15 @@ import { IconButton } from "../atoms/IconButton"
 import { Logo } from "../atoms/Logo"
 import { NavLink } from "../molecules/NavLink"
 import { cn } from "../../lib/cn"
+import { LearnMegaMenu } from "./LearnMegaMenu"
 
 const navItems = [
   { key: "learn", href: "/learn", label: "Learn" },
   { key: "about", href: "/about", label: "About" },
   { key: "docs", href: "https://docs.orbit-dev.app", label: "Docs", icon: ExternalLink, external: true },
 ]
+
+const secondaryNavItems = navItems.filter((item) => item.key !== "learn")
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -24,7 +27,8 @@ export function Navbar() {
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
-          {navItems.map((item) => (
+          <LearnMegaMenu />
+          {secondaryNavItems.map((item) => (
             <NavLink key={item.key} href={item.href} icon={item.icon} external={item.external}>
               {item.label}
             </NavLink>
