@@ -17,7 +17,7 @@ export function DocsToc({ headings }: DocsTocProps) {
     <div className="hidden shrink-0 basis-56 xl:block">
       <nav aria-label="On this page" className="sticky top-24 max-h-[calc(100svh-7rem)] overflow-y-auto">
         <p className="text-sm font-medium text-ink">On this page</p>
-        <ul className="mt-4 flex flex-col gap-1">
+        <ul className="mt-4 flex flex-col">
           {headings.map((heading) => (
             <li key={heading.slug}>
               <a
