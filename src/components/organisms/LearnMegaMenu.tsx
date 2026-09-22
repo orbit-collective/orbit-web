@@ -125,8 +125,7 @@ export function LearnMegaMenu() {
 
               <p className="mt-4 text-sm font-semibold text-ink">Connect Orbit to your tools</p>
               <p className="mt-1.5 text-xs leading-relaxed text-ink-muted">
-                Discord notifications and Jira issue import are live today, with more integrations
-                on the way.
+                Connect Orbit with GitHub now! Track your pull requests and issues, and see your community grow in one place.
               </p>
 
               <Button
