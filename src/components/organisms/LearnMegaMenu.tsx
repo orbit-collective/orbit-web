@@ -3,22 +3,32 @@ import {
   ArrowRight,
   Bell,
   BookOpen,
+  ChevronsUpDown,
+  CircleUser,
+  Command,
   Compass,
+  Database,
+  DatabaseBackup,
   Filter,
+  Flag,
   History,
   Kanban,
   Keyboard,
   KeyRound,
   Layers,
+  LogIn,
   MessagesSquare,
   Palette,
+  Radio,
   Settings,
   ShieldCheck,
   SwatchBook,
   Tag,
+  Terminal,
   Type,
   UserPlus,
   Webhook,
+  Workflow,
 } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import { useState } from "react"
@@ -27,8 +37,28 @@ import docsNav from "../../generated/docs-nav.json"
 import { Button } from "../atoms/Button"
 
 const MAX_CATEGORIES = 6
+// What a newcomer should see first. The rest of the docs are one click away.
+const FEATURED_CATEGORIES = [
+  "live-updates",
+  "command-palette",
+  "integrations",
+  "automation",
+  "permissions",
+  "notifications",
+]
 const DEFAULT_LANG = "en"
 const MAX_DESCRIPTION_LENGTH = 62
+
+// The docs' own first paragraphs read badly at this size (raw shortcuts,
+// long sentences), so the featured topics get a one-line pitch.
+const TAGLINES: Record<string, string> = {
+  "live-updates": "Teammates' changes, no reload",
+  "command-palette": "Jump anywhere and act from the keyboard",
+  integrations: "Connect GitHub, Discord and more",
+  automation: "\u201cIf this, then that\u201d rules for a project",
+  permissions: "Project roles and fine-grained access",
+  notifications: "In-app and email, per event type",
+}
 
 function truncate(text: string, maxLength: number): string {
   return text.length > maxLength ? `${text.slice(0, maxLength).trimEnd()}…` : text
@@ -43,7 +73,17 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   "content-moderation": ShieldCheck,
   integrations: Webhook,
   "issue-views": Kanban,
-  "label-colors": Tag,
+  labels: Tag,
+  "live-updates": Radio,
+  "command-palette": Command,
+  automation: Workflow,
+  authentication: LogIn,
+  avatars: CircleUser,
+  backup: DatabaseBackup,
+  redis: Database,
+  priorities: Flag,
+  dropdowns: ChevronsUpDown,
+  "developer-portal": Terminal,
   notifications: Bell,
   permissions: KeyRound,
   "project-invitations": UserPlus,
@@ -59,7 +99,11 @@ function getCategoryIcon(slug: string): LucideIcon {
 }
 
 export function LearnMegaMenu() {
-  const categories = docsNav.slice(0, MAX_CATEGORIES)
+  const featured = FEATURED_CATEGORIES.flatMap((slug) => docsNav.find((category) => category.slug === slug) ?? [])
+  const categories = [...featured, ...docsNav.filter((category) => !featured.includes(category))].slice(
+    0,
+    MAX_CATEGORIES,
+  )
   const [imageFailed, setImageFailed] = useState(false)
 
   return (
@@ -96,14 +140,22 @@ export function LearnMegaMenu() {
                       </span>
                       <span className="min-w-0 pt-0.5">
                         <span className="block text-sm font-medium text-ink">{category.title}</span>
-                        <span className="mt-0.5 line-clamp-1 block text-xs leading-relaxed text-ink-muted">
-                          {truncate(category.description, MAX_DESCRIPTION_LENGTH)}
+                        <span className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-ink-muted">
+                          {TAGLINES[category.slug] ?? truncate(category.description, MAX_DESCRIPTION_LENGTH)}
                         </span>
                       </span>
                     </Link>
                   )
                 })}
               </div>
+
+              <Link
+                to={`/learn/${DEFAULT_LANG}`}
+                className="mt-3 inline-flex items-center gap-1.5 px-2.5 text-xs font-medium text-ink-muted transition-colors duration-150 ease-in-out hover:text-ink"
+              >
+                Browse all {docsNav.length} topics
+                <ArrowRight className="h-3 w-3" aria-hidden="true" />
+              </Link>
             </div>
 
             <div className="w-80 shrink-0 rounded-xl border border-line-strong bg-surface p-5">
