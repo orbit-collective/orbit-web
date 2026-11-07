@@ -1,4 +1,4 @@
-import { Check, Filter, MessagesSquare } from "lucide-react"
+import { CircleCheck, Command, CornerDownLeft, GitBranch, GitPullRequest, Search } from "lucide-react"
 import { mockPanelClass } from "../../lib/mockPanel"
 import { MockupFrame } from "../atoms/MockupFrame"
 
@@ -12,7 +12,13 @@ const roles = [
   { role: "Member", width: "50%" },
 ]
 
-const activeFilters = ["Assignee: me", "Status: Active", "Label: Bug"]
+const viewers = ["A", "M", "K"]
+
+const paletteResults = [
+  { label: "Go to issue ORB-142", hint: "Issue", active: true },
+  { label: "Change status\u2026", hint: "Action", active: false },
+  { label: "Assign to\u2026", hint: "Action", active: false },
+]
 
 const activityEntries = [
   { titleWidth: "70%", metaWidth: "35%" },
@@ -25,12 +31,109 @@ export function DeepDivePreview({ activeIndex }: DeepDivePreviewProps) {
     <MockupFrame className="mx-auto w-full max-w-xs sm:max-w-sm">
       <div className="relative h-64 sm:h-72">
         <div aria-hidden={activeIndex !== 0} className={mockPanelClass(activeIndex === 0)}>
+          <div className="flex flex-col gap-3 px-6">
+            <div className="flex items-center gap-3">
+              <div className="flex -space-x-2">
+                {viewers.map((initial) => (
+                  <span
+                    key={initial}
+                    className="flex h-7 w-7 items-center justify-center rounded-full border border-line-strong bg-canvas-hover text-[10px] font-medium text-ink"
+                  >
+                    {initial}
+                  </span>
+                ))}
+              </div>
+              <span className="text-[11px] font-medium text-ink-muted">3 viewing</span>
+              <span className="ml-auto inline-flex items-center gap-1.5 text-[11px] font-medium text-ink-muted">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+                </span>
+                Live
+              </span>
+            </div>
+            <div className="rounded-md border border-line bg-canvas-hover p-3">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-28 rounded-full bg-line-strong" />
+                <span className="ml-auto rounded-full border border-line-strong px-2 py-0.5 text-[10px] font-medium text-ink">
+                  In review
+                </span>
+              </div>
+              <div className="mt-2.5 h-2 w-full rounded-full bg-line" />
+              <div className="mt-1.5 h-2 w-3/5 rounded-full bg-line" />
+            </div>
+            <p className="rounded-md border border-line-strong px-3 py-2 text-[11px] text-ink-muted">
+              <span className="font-medium text-ink">Anna</span> is editing this issue
+            </p>
+          </div>
+        </div>
+
+        <div aria-hidden={activeIndex !== 1} className={mockPanelClass(activeIndex === 1)}>
+          <div className="flex flex-col gap-3 px-6">
+            <div className="flex items-center gap-2 rounded-md border border-line-strong bg-canvas-hover px-3 py-2.5">
+              <Search className="h-3.5 w-3.5 shrink-0 text-ink-muted" strokeWidth={1.75} aria-hidden="true" />
+              <span className="text-[11px] text-ink-muted">Search or run a command</span>
+              <span className="ml-auto inline-flex items-center gap-0.5 rounded border border-line-strong px-1.5 py-0.5 text-[10px] font-medium text-ink-muted">
+                <Command className="h-2.5 w-2.5" aria-hidden="true" />K
+              </span>
+            </div>
+            <div className="flex flex-col gap-1">
+              {paletteResults.map((result, index) => (
+                <div
+                  key={result.label}
+                  className={
+                    result.active
+                      ? "flex items-center gap-2 rounded-md border border-line-strong bg-canvas-hover px-3 py-2"
+                      : "flex items-center gap-2 rounded-md border border-transparent px-3 py-2"
+                  }
+                  style={{ transitionDelay: activeIndex === 1 ? `${index * 80}ms` : "0ms" }}
+                >
+                  <span className={result.active ? "text-[11px] font-medium text-ink" : "text-[11px] text-ink-muted"}>
+                    {result.label}
+                  </span>
+                  <span className="ml-auto text-[10px] text-ink-muted">{result.hint}</span>
+                  {result.active ? (
+                    <CornerDownLeft className="h-3 w-3 text-ink-muted" strokeWidth={1.75} aria-hidden="true" />
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div aria-hidden={activeIndex !== 2} className={mockPanelClass(activeIndex === 2)}>
+          <div className="flex flex-col gap-2.5 px-6">
+            <div className="flex items-center gap-2 rounded-md border border-line bg-canvas-hover px-3 py-2.5">
+              <GitBranch className="h-3.5 w-3.5 shrink-0 text-ink-muted" strokeWidth={1.75} aria-hidden="true" />
+              <span className="truncate text-[11px] font-medium text-ink">orb-142-fix-login-redirect</span>
+            </div>
+            <div className="flex items-center gap-2 rounded-md border border-line bg-canvas-hover px-3 py-2.5">
+              <GitPullRequest className="h-3.5 w-3.5 shrink-0 text-ink-muted" strokeWidth={1.75} aria-hidden="true" />
+              <span className="text-[11px] font-medium text-ink">Fix login redirect</span>
+              <span className="ml-auto rounded-full border border-line-strong px-2 py-0.5 text-[10px] font-medium text-ink-muted">
+                Open
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <span className="inline-flex items-center gap-1 rounded-full border border-line-strong px-2.5 py-1 text-[10px] font-medium text-ink">
+                <CircleCheck className="h-3 w-3" strokeWidth={1.75} aria-hidden="true" />
+                CI passing
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-full border border-line-strong px-2.5 py-1 text-[10px] font-medium text-ink">
+                <CircleCheck className="h-3 w-3" strokeWidth={1.75} aria-hidden="true" />
+                Approved
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div aria-hidden={activeIndex !== 3} className={mockPanelClass(activeIndex === 3)}>
           <div className="flex flex-col gap-2.5 px-6">
             {roles.map((member, index) => (
               <div
                 key={member.role}
                 className="flex items-center gap-3 rounded-md border border-line bg-canvas-hover px-3 py-2.5"
-                style={{ transitionDelay: activeIndex === 0 ? `${index * 100}ms` : "0ms" }}
+                style={{ transitionDelay: activeIndex === 3 ? `${index * 100}ms` : "0ms" }}
               >
                 <span className="h-6 w-6 shrink-0 rounded-full border border-line-strong" />
                 <span className="h-2 rounded-full bg-line-strong" style={{ width: member.width }} />
@@ -42,36 +145,13 @@ export function DeepDivePreview({ activeIndex }: DeepDivePreviewProps) {
           </div>
         </div>
 
-        <div aria-hidden={activeIndex !== 1} className={mockPanelClass(activeIndex === 1)}>
-          <div className="flex flex-col gap-4 px-6">
-            <div className="flex flex-wrap gap-2">
-              {activeFilters.map((filter) => (
-                <span
-                  key={filter}
-                  className="rounded-full border border-line-strong bg-canvas-hover px-3 py-1 text-[11px] font-medium text-ink"
-                >
-                  {filter}
-                </span>
-              ))}
-            </div>
-            <div className="flex items-center gap-2 rounded-md border border-line px-3 py-2">
-              <Filter className="h-3.5 w-3.5 shrink-0 text-ink-muted" strokeWidth={1.75} aria-hidden="true" />
-              <span className="h-2 w-24 rounded-full bg-line" />
-              <span className="ml-auto inline-flex items-center gap-1 rounded-md bg-accent px-2 py-1 text-[10px] font-medium text-accent-ink">
-                <Check className="h-2.5 w-2.5" aria-hidden="true" />
-                Saved
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div aria-hidden={activeIndex !== 2} className={mockPanelClass(activeIndex === 2)}>
+        <div aria-hidden={activeIndex !== 4} className={mockPanelClass(activeIndex === 4)}>
           <div className="flex flex-col gap-4 px-6">
             {activityEntries.map((entry, index) => (
               <div
                 key={index}
                 className="flex items-start gap-3"
-                style={{ transitionDelay: activeIndex === 2 ? `${index * 100}ms` : "0ms" }}
+                style={{ transitionDelay: activeIndex === 4 ? `${index * 100}ms` : "0ms" }}
               >
                 <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
                 <div className="flex-1">
@@ -83,25 +163,6 @@ export function DeepDivePreview({ activeIndex }: DeepDivePreviewProps) {
           </div>
         </div>
 
-        <div aria-hidden={activeIndex !== 3} className={mockPanelClass(activeIndex === 3)}>
-          <div className="flex flex-col items-center gap-4 px-6">
-            <div className="w-full max-w-[15rem] rounded-md border border-line-strong bg-canvas-hover p-3">
-              <div className="flex items-center gap-2">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-line-strong">
-                  <MessagesSquare className="h-3 w-3 text-ink-muted" strokeWidth={1.75} aria-hidden="true" />
-                </span>
-                <span className="h-2 w-20 rounded-full bg-line-strong" />
-                <span className="ml-auto h-2 w-2 rounded-full bg-accent" />
-              </div>
-              <div className="mt-2.5 h-2 w-full rounded-full bg-line" />
-              <div className="mt-1.5 h-2 w-2/3 rounded-full bg-line" />
-            </div>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-line-strong px-3 py-1 text-[11px] font-medium text-ink-muted">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-              Connected to Discord
-            </span>
-          </div>
-        </div>
       </div>
     </MockupFrame>
   )

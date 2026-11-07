@@ -1,9 +1,27 @@
-import { Filter, History, MessagesSquare, Users } from "lucide-react"
+import { Command, GitBranch, History, Radio, Users } from "lucide-react"
 import { useScrollSteps } from "../../hooks/useScrollSteps"
 import { cn } from "../../lib/cn"
 import { DeepDivePreview } from "./DeepDivePreview"
 
 const chapters = [
+  {
+    icon: Radio,
+    title: "Live collaboration",
+    description:
+      "Changes from your teammates show up without a refresh. See who else is looking at an issue, and get a heads-up before two people overwrite each other.",
+  },
+  {
+    icon: Command,
+    title: "Command palette",
+    description:
+      "Press Ctrl or \u2318 + K to jump to any issue, project or person, or change the status, labels and assignee of the issue in front of you, all from the keyboard.",
+  },
+  {
+    icon: GitBranch,
+    title: "GitHub integration",
+    description:
+      "Create a branch or pull request from an issue, follow its CI and review status next to it, and let automation move the issue when the pull request merges.",
+  },
   {
     icon: Users,
     title: "Project roles",
@@ -11,22 +29,10 @@ const chapters = [
       "Grant project scoped permissions so every teammate sees exactly the projects and actions relevant to them, nothing more.",
   },
   {
-    icon: Filter,
-    title: "Saved filters",
-    description:
-      "Save the filters your team checks every day and get back to them in one click, across list, board or calendar.",
-  },
-  {
     icon: History,
     title: "Activity log",
     description:
       "Every change is recorded, so you can trace the full history of an issue or a project at any time.",
-  },
-  {
-    icon: MessagesSquare,
-    title: "Integrations",
-    description:
-      "Connect Orbit to Discord and get notified the moment an issue moves, without leaving the conversation.",
   },
 ]
 
