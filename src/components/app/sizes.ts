@@ -4,3 +4,4 @@
  */
 export const LIST_SIZE = { width: 1100, height: 400 }
 export const BOARD_SIZE = { width: 1100, height: 650 }
+export const CALENDAR_SIZE = { width: 1100, height: 725 }
