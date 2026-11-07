@@ -4,14 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "predev": "node scripts/fetch-docs.mjs && node scripts/fetch-release.mjs && vite-node scripts/generate-docs-index.mts",
+    "predev": "node scripts/fetch-docs.mjs && node scripts/fetch-release.mjs && vite-node scripts/generate-docs-index.mts && vite-node scripts/generate-changelog.mts",
     "dev": "vite",
-    "prebuild": "node scripts/fetch-docs.mjs && node scripts/fetch-release.mjs && vite-node scripts/generate-docs-index.mts && vite-node scripts/generate-sitemap.mts",
+    "prebuild": "node scripts/fetch-docs.mjs && node scripts/fetch-release.mjs && vite-node scripts/generate-docs-index.mts && vite-node scripts/generate-changelog.mts && vite-node scripts/generate-sitemap.mts",
     "build": "tsc -b && vite build",
     "postbuild": "vite-node scripts/prerender.mts",
     "lint": "eslint .",
     "preview": "vite preview",
-    "fetch-docs": "node scripts/fetch-docs.mjs && node scripts/fetch-release.mjs && vite-node scripts/generate-docs-index.mts"
+    "fetch-docs": "node scripts/fetch-docs.mjs && node scripts/fetch-release.mjs && vite-node scripts/generate-docs-index.mts && vite-node scripts/generate-changelog.mts"
   },
   "dependencies": {
     "@fontsource/figtree": "^5.3.0",

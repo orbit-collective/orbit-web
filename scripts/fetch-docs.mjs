@@ -26,7 +26,10 @@ try {
   cpSync(join(tmpDir, "documentation/en"), join(dest, "en"), { recursive: true })
   cpSync(join(tmpDir, "documentation/pl"), join(dest, "pl"), { recursive: true })
 
-  console.log("Docs fetched into src/content/docs/")
+  // Files at the root of a sparse clone are always checked out, so the changelog is already here.
+  cpSync(join(tmpDir, "CHANGELOG.md"), join(projectRoot, "src/content/CHANGELOG.md"))
+
+  console.log("Docs and CHANGELOG.md fetched into src/content/")
 } finally {
   rmSync(tmpDir, { recursive: true, force: true })
 }
