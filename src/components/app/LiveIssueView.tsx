@@ -1,14 +1,20 @@
 import { ArrowLeft, Bug, Link2, TriangleAlert } from "lucide-react"
 import { people, types } from "./data"
 import type { Person } from "./data"
+import { motionVars } from "./motionVars"
 import { Avatar } from "./parts"
 
 /** Avatars of the other people looking at the same issue, as PresenceStack draws them. */
 function PresenceStack({ users }: { users: Person[] }) {
   return (
     <div className="flex items-center -space-x-2">
-      {users.map((user) => (
-        <div key={user.id} className="rounded-full ring-2 ring-[var(--bg-color-hover)]">
+      {users.map((user, index) => (
+        // Teammates arrive one after another: each pops in with the app'"'"'s spring.
+        <div
+          key={user.id}
+          style={motionVars({ i: index, step: "150ms", base: "350ms" })}
+          className="m-pop rounded-full ring-2 ring-[var(--bg-color-hover)]"
+        >
           <Avatar person={user} size="md" />
         </div>
       ))}
@@ -24,7 +30,11 @@ function joinNames(names: string[]): string {
 /** ConcurrentEditNotice: shown while someone else has the description open. */
 function ConcurrentEditNotice({ names }: { names: string[] }) {
   return (
-    <div className="flex items-start gap-2 rounded-lg border border-solid border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs text-[var(--text-color)]">
+    // The warning appears once the second editor has arrived.
+    <div
+      style={motionVars({ base: "1000ms", y: "8px" })}
+      className="m-rise flex items-start gap-2 rounded-lg border border-solid border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs text-[var(--text-color)]"
+    >
       <TriangleAlert size={14} className="mt-0.5 shrink-0" />
       <p>
         <span className="font-medium">{joinNames(names)}</span> are editing this description too. Saving
@@ -66,11 +76,11 @@ export function LiveIssueView() {
         </div>
       </header>
       <div className="flex flex-col gap-4 px-6 py-6">
-        <h1 className="text-2xl font-semibold text-[var(--text-color)]">
+        <h1 className="m-rise text-2xl font-semibold text-[var(--text-color)]" style={motionVars({ base: "50ms" })}>
           Fix login redirect after session timeout
         </h1>
         <ConcurrentEditNotice names={editors.map((person) => person.name)} />
-        <p className="text-sm leading-relaxed text-[var(--text-color)]">
+        <p className="m-rise text-sm leading-relaxed text-[var(--text-color)]" style={motionVars({ base: "150ms" })}>
           People who are sent to the login page after their session times out land on the dashboard
           instead of the page they were on. Keep the target across the redirect.
         </p>
