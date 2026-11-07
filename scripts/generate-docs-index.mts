@@ -14,7 +14,8 @@ import {
  * the site can show titles, sidebars and menus without bundling every page:
  *
  * - docs-index.json: the whole tree (no page bodies), used by /learn.
- * - docs-nav.json:   English categories only, used by the navbar menu.
+ * - docs-nav.json:   English categories only, used by the navbar menu and the
+ *                    landing stats.
  *
  * Page bodies stay in src/content/docs and are loaded one at a time.
  */
@@ -81,6 +82,7 @@ const nav = (tree.find((entry) => entry.lang === "en")?.categories ?? []).map((c
   slug: category.slug,
   title: category.title,
   description: category.readme.description,
+  guideCount: category.guides.length,
 }))
 
 mkdirSync(outDir, { recursive: true })

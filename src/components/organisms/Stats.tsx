@@ -1,10 +1,14 @@
+import docsNav from "../../generated/docs-nav.json"
 import { Reveal } from "../atoms/Reveal"
 import { StatItem } from "../molecules/StatItem"
+
+// Counted from the documentation fetched at build time, so it never goes stale.
+const guideCount = docsNav.reduce((total, category) => total + category.guideCount, 0)
 
 const stats = [
   { value: 4, label: "Views: List, Board, Calendar and Activity" },
   { value: 100, suffix: "%", label: "Self-hosted on your own infrastructure" },
-  { value: 1, label: "Workspace for planning, tracking and reporting" },
+  { value: guideCount, label: "Step-by-step guides, in English and Polish" },
 ]
 
 export function Stats() {
