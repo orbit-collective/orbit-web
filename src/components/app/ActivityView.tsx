@@ -2,6 +2,7 @@ import { Pencil, Plus } from "lucide-react"
 import type { ReactNode } from "react"
 import { people } from "./data"
 import type { Person } from "./data"
+import { motionVars } from "./motionVars"
 import { Avatar } from "./parts"
 
 type Kind = "created" | "changed"
@@ -65,16 +66,18 @@ export function ActivityView() {
   return (
     <div className="h-full bg-[var(--bg-color)] p-4">
       <div className="flex flex-col">
-        {groups.map((group) => (
-          <div key={group.ago}>
+        {groups.map((group, groupIndex) => (
+          <div key={group.ago} className="m-rise" style={motionVars({ i: groupIndex, y: "8px" })}>
             <div className="mt-4 mb-3 flex items-center gap-2 first:mt-0">
               <span className="shrink-0 text-[10px] font-medium whitespace-nowrap text-[var(--text-muted-color)]">
                 {group.ago}
               </span>
-              <span className="h-px flex-1 bg-[var(--border-color)]" />
+              <span className="m-line h-px flex-1 bg-[var(--border-color)]" style={motionVars({ i: groupIndex, base: "100ms" })} />
             </div>
             <div className="flex gap-3 pb-2">
-              <Avatar person={group.person} size="lg" />
+              <div className="m-pop shrink-0" style={motionVars({ i: groupIndex, base: "100ms" })}>
+                <Avatar person={group.person} size="lg" />
+              </div>
               <div className="min-w-0 flex-1 pt-0.5">
                 <span className="truncate text-sm font-semibold text-[var(--text-color)]">
                   {group.person.name}
@@ -83,7 +86,9 @@ export function ActivityView() {
                   {group.entries.map((entry, index) => (
                     <div
                       key={index}
-                      className="flex items-start gap-1.5 text-xs leading-relaxed text-[var(--text-gray-color)]"
+                      // Entries slide in after their avatar: 150 ms plus a step each.
+                      style={motionVars({ i: index, base: `${150 + groupIndex * 30}ms` })}
+                      className="m-slide flex items-start gap-1.5 text-xs leading-relaxed text-[var(--text-gray-color)]"
                     >
                       {entry.kind === "created" ? (
                         <Plus size={14} className="mt-0.5 shrink-0 text-[var(--success-color)]" />
