@@ -9,3 +9,4 @@ export const ACTIVITY_SIZE = { width: 520, height: 400 }
 export const PALETTE_SIZE = { width: 640, height: 230 }
 export const LIVE_SIZE = { width: 560, height: 290 }
 export const DEVELOPMENT_SIZE = { width: 300, height: 385 }
+export const PROJECTS_SIZE = { width: 740, height: 260 }
