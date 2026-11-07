@@ -10,6 +10,7 @@ import {
   Tag,
   Workflow,
 } from "lucide-react"
+import { cn } from "../../lib/cn"
 import { CommandPaletteView } from "../app/CommandPaletteView"
 import { LiveIssueView } from "../app/LiveIssueView"
 import { ScaledFrame } from "../app/ScaledFrame"
@@ -122,7 +123,7 @@ export function Features() {
 
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {features.map(({ className, ...feature }, index) => (
-            <Reveal key={feature.title} delay={(index % 4) * 80} className={className}>
+            <Reveal key={feature.title} delay={(index % 4) * 80} className={cn("min-w-0", className)}>
               <FeatureCard {...feature} />
             </Reveal>
           ))}
