@@ -1,15 +1,15 @@
 import { ExternalLink } from "lucide-react"
-import { Link } from "react-router-dom"
 import { Logo } from "../atoms/Logo"
+import { TransitionLink } from "../atoms/TransitionLink"
 import { NavLink } from "../molecules/NavLink"
 
 export function Footer() {
   return (
     <footer className="border-t border-line px-6 py-10">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 sm:flex-row">
-        <Link to="/">
+        <TransitionLink to="/">
           <Logo />
-        </Link>
+        </TransitionLink>
 
         <nav className="flex flex-wrap items-center justify-center gap-6" aria-label="Footer">
           <NavLink href="/learn">Learn</NavLink>

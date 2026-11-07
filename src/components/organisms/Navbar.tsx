@@ -1,7 +1,7 @@
 import { ExternalLink, Menu, X } from "lucide-react"
 import { Suspense, lazy, useEffect, useState } from "react"
-import { Link } from "react-router-dom"
 import { Button } from "../atoms/Button"
+import { TransitionLink } from "../atoms/TransitionLink"
 import { IconButton } from "../atoms/IconButton"
 import { Logo } from "../atoms/Logo"
 import { NavLink } from "../molecules/NavLink"
@@ -48,7 +48,10 @@ export function Navbar() {
   }, [])
 
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-canvas/80 backdrop-blur-md">
+    <header
+      className="sticky top-0 z-50 border-b border-line bg-canvas/80 backdrop-blur-md"
+      style={{ viewTransitionName: "site-header" }}
+    >
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-[60] focus:rounded-md focus:bg-accent focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-accent-ink"
@@ -56,9 +59,9 @@ export function Navbar() {
         Skip to content
       </a>
       <div className="mx-auto flex h-16 max-w-[75rem] items-center justify-between px-6">
-        <Link to="/" className="shrink-0">
+        <TransitionLink to="/" className="shrink-0">
           <Logo />
-        </Link>
+        </TransitionLink>
 
         <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
           <LearnMegaMenu />

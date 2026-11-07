@@ -1,7 +1,8 @@
 import type { LucideIcon } from "lucide-react"
 import type { ReactNode } from "react"
-import { Link, useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import { cn } from "../../lib/cn"
+import { TransitionLink } from "../atoms/TransitionLink"
 import { isWithin } from "../../lib/paths"
 
 interface NavLinkProps {
@@ -32,9 +33,14 @@ export function NavLink({ href, children, icon: Icon, external, className, onCli
   }
 
   return (
-    <Link to={href} onClick={onClick} className={classes} aria-current={isCurrent ? "page" : undefined}>
+    <TransitionLink
+      to={href}
+      onClick={onClick}
+      className={classes}
+      aria-current={isCurrent ? "page" : undefined}
+    >
       {children}
       {Icon ? <Icon className="h-3.5 w-3.5" aria-hidden="true" /> : null}
-    </Link>
+    </TransitionLink>
   )
 }

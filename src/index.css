@@ -79,6 +79,25 @@
   display: none;
 }
 
+/*
+ * Page changes cross-fade (react-router's viewTransition on internal links).
+ * The navbar has its own transition name, so it stays put instead of fading
+ * with the page.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 180ms;
+  animation-timing-function: ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
 @keyframes dialog-in {
   from {
     opacity: 0;
