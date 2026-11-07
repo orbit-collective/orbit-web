@@ -1,25 +1,66 @@
-import { Bell, Command, GitBranch, LayoutDashboard, ListChecks, Radio, Tag, Workflow } from "lucide-react"
+import {
+  Bell,
+  Command,
+  Filter,
+  GitBranch,
+  LayoutDashboard,
+  ListChecks,
+  Radio,
+  ShieldCheck,
+  Tag,
+  Workflow,
+} from "lucide-react"
+import { CommandPaletteView } from "../app/CommandPaletteView"
+import { LiveIssueView } from "../app/LiveIssueView"
+import { ScaledFrame } from "../app/ScaledFrame"
+import { LIVE_SIZE, PALETTE_SIZE } from "../app/sizes"
 import { Reveal } from "../atoms/Reveal"
 import { FeatureCard } from "../molecules/FeatureCard"
+import type { ReactNode } from "react"
 
+/** A real Orbit screen inside a card, never wider than it is in the app. */
+function Screen({ label, size, children }: { label: string; size: { width: number; height: number }; children: ReactNode }) {
+  return (
+    <div className="w-full overflow-hidden rounded-lg border border-line-strong" style={{ maxWidth: size.width }}>
+      <ScaledFrame {...size} label={label} initialScale={0.8} minScale={0.55}>
+        {children}
+      </ScaledFrame>
+    </div>
+  )
+}
+
+// The two with a screen are the wide tiles of the first row; the other eight
+// fill two rows of four.
 const features = [
-  {
-    icon: ListChecks,
-    title: "Issue tracking",
-    description:
-      "Create issues, set status, priority, assignees and dates, then move them through a workflow that fits your team. Edit them right in the list.",
-  },
   {
     icon: Radio,
     title: "Live updates",
     description:
       "Changes from your teammates appear without a refresh, along with who else is looking at an issue and when someone is editing it.",
+    className: "lg:col-span-2",
+    visual: (
+      <Screen label="An issue page with teammates viewing it and a warning that two people are editing" size={LIVE_SIZE}>
+        <LiveIssueView />
+      </Screen>
+    ),
   },
   {
     icon: Command,
     title: "Command palette",
     description:
       "Press Ctrl or \u2318 + K to jump to any issue, project or person, or change an issue's status, labels and assignee from the keyboard.",
+    className: "lg:col-span-2",
+    visual: (
+      <Screen label="The command palette searching for issues" size={PALETTE_SIZE}>
+        <CommandPaletteView />
+      </Screen>
+    ),
+  },
+  {
+    icon: ListChecks,
+    title: "Issue tracking",
+    description:
+      "Create issues, set status, priority, assignees and dates, then move them through a workflow that fits your team. Edit them right in the list.",
   },
   {
     icon: GitBranch,
@@ -51,6 +92,18 @@ const features = [
     description:
       "Get notified when an issue moves, a comment lands or someone mentions you, and keep your inbox tidy with filters and bulk actions.",
   },
+  {
+    icon: ShieldCheck,
+    title: "Roles & permissions",
+    description:
+      "Give every project its own roles, from Owner to Viewer or your own custom ones, with fine-grained control over who can do what.",
+  },
+  {
+    icon: Filter,
+    title: "Saved filters",
+    description:
+      "Save the filters your team checks every day and get back to them in one click, in the list, the board or the calendar.",
+  },
 ]
 
 export function Features() {
@@ -68,8 +121,8 @@ export function Features() {
         </Reveal>
 
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((feature, index) => (
-            <Reveal key={feature.title} delay={(index % 4) * 80}>
+          {features.map(({ className, ...feature }, index) => (
+            <Reveal key={feature.title} delay={(index % 4) * 80} className={className}>
               <FeatureCard {...feature} />
             </Reveal>
           ))}
