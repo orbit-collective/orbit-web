@@ -13,7 +13,7 @@ export function LandingTemplate() {
   return (
     <div className="min-h-screen bg-canvas">
       <Navbar />
-      <main>
+      <main id="main-content" tabIndex={-1} className="outline-none">
         <Hero />
         <Stats />
         <Features />
