@@ -1,4 +1,4 @@
-import { Bell, LayoutDashboard, ListChecks, Tag } from "lucide-react"
+import { Bell, Command, GitBranch, LayoutDashboard, ListChecks, Radio, Tag, Workflow } from "lucide-react"
 import { Reveal } from "../atoms/Reveal"
 import { FeatureCard } from "../molecules/FeatureCard"
 
@@ -7,7 +7,31 @@ const features = [
     icon: ListChecks,
     title: "Issue tracking",
     description:
-      "Create issues, set status, priority, assignees and dates, then move them through a workflow that fits your team.",
+      "Create issues, set status, priority, assignees and dates, then move them through a workflow that fits your team. Edit them right in the list.",
+  },
+  {
+    icon: Radio,
+    title: "Live updates",
+    description:
+      "Changes from your teammates appear without a refresh, along with who else is looking at an issue and when someone is editing it.",
+  },
+  {
+    icon: Command,
+    title: "Command palette",
+    description:
+      "Press Ctrl or \u2318 + K to jump to any issue, project or person, or change an issue's status, labels and assignee from the keyboard.",
+  },
+  {
+    icon: GitBranch,
+    title: "GitHub",
+    description:
+      "Create a branch or pull request from an issue and follow its CI and review status right next to it.",
+  },
+  {
+    icon: Workflow,
+    title: "Automation",
+    description:
+      "Build \u201cwhen this happens, do that\u201d rules for each project, such as moving an issue to Done when its pull request merges.",
   },
   {
     icon: LayoutDashboard,
@@ -17,15 +41,15 @@ const features = [
   },
   {
     icon: Tag,
-    title: "Labels & priority",
+    title: "Labels & priorities",
     description:
-      "Tag every issue with the labels and priority that matter to your team, so nothing important gets lost in the noise.",
+      "Tag issues with labels and give each project its own priority scale, with your own names, colors and order.",
   },
   {
     icon: Bell,
     title: "Notifications",
     description:
-      "Get notified when an issue moves, a comment lands, or a project you follow changes state.",
+      "Get notified when an issue moves, a comment lands or someone mentions you, and keep your inbox tidy with filters and bulk actions.",
   },
 ]
 
@@ -45,7 +69,7 @@ export function Features() {
 
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, index) => (
-            <Reveal key={feature.title} delay={index * 80}>
+            <Reveal key={feature.title} delay={(index % 4) * 80}>
               <FeatureCard {...feature} />
             </Reveal>
           ))}
