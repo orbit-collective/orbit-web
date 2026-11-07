@@ -89,15 +89,16 @@ for (const path of paths) {
 
   const { head, body } = splitHoistedHead(appHtml)
 
+  // The replacements are functions on purpose: a string replacement treats "$$",
+  // "$&" and friends as patterns, which silently rewrote the "$$" of a shell
+  // command in the docs and made the page fail to hydrate.
+  const fontPreloads = `${siteFontPreloads}${PAGES_WITH_APP_MOCKUPS.has(path) ? appFontPreloads : ""}`
   const html = template
-    .replace(/<html[^>]*>/, `<html lang="${langFor(path)}">`)
+    .replace(/<html[^>]*>/, () => `<html lang="${langFor(path)}">`)
     .replace(/<title>.*?<\/title>/s, "")
     .replace(/<meta\s+name="description"[^>]*\/>/s, "")
-    .replace(
-      "</head>",
-      `${siteFontPreloads}${PAGES_WITH_APP_MOCKUPS.has(path) ? appFontPreloads : ""}${head}</head>`,
-    )
-    .replace('<div id="root"></div>', `<div id="root">${body}</div>`)
+    .replace("</head>", () => `${fontPreloads}${head}</head>`)
+    .replace('<div id="root"></div>', () => `<div id="root">${body}</div>`)
 
   const outputPath = outputPathFor(path)
   mkdirSync(dirname(outputPath), { recursive: true })
