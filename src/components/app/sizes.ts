@@ -8,3 +8,4 @@ export const CALENDAR_SIZE = { width: 1100, height: 725 }
 export const ACTIVITY_SIZE = { width: 520, height: 400 }
 export const PALETTE_SIZE = { width: 640, height: 230 }
 export const LIVE_SIZE = { width: 560, height: 290 }
+export const DEVELOPMENT_SIZE = { width: 300, height: 385 }
