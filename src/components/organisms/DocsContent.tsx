@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm"
 import { isExternalDocLink, resolveDocLink } from "../../lib/docLinks"
 import { getPreviewForPath } from "../../lib/docs"
 import { rehypePrism } from "../../lib/prism"
+import { CodeBlock } from "../molecules/CodeBlock"
 import { DocLinkPreviewCard } from "../molecules/DocLinkPreviewCard"
 import { ViewOnGithubLink } from "../molecules/ViewOnGithubLink"
 
@@ -78,6 +79,7 @@ export function DocsContent({ lang, category, eyebrow, githubUrl, content }: Doc
         rehypePlugins={[rehypeSlug, [rehypePrism, { ignoreMissing: true }]]}
         components={{
           a: (props) => <DocAnchor {...props} lang={lang} category={category} />,
+          pre: (props) => <CodeBlock {...props} />,
         }}
       >
         {content}
