@@ -187,12 +187,14 @@ interface BoardViewProps {
   groupBy?: Group
   /** How many columns to draw, from the left. */
   columns?: number
+  /** Overrides the page background, for a board that sits inside another surface. */
+  className?: string
 }
 
 /** The project's Board view, grouped by priority (Orbit's default) or by status. */
-export function BoardView({ groupBy = "priority", columns = 3 }: BoardViewProps) {
+export function BoardView({ groupBy = "priority", columns = 3, className }: BoardViewProps) {
   return (
-    <div className="flex h-full w-full flex-col bg-[var(--bg-color)]">
+    <div className={cn("flex h-full w-full flex-col bg-[var(--bg-color)]", className)}>
       <div className="flex items-center px-6 pt-6">
         <div className="inline-flex items-center gap-1 rounded-lg border border-[var(--border-color)] bg-[var(--surface-color)] p-1">
           {(["priority", "status"] as const).map((group) => (
