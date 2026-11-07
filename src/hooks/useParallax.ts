@@ -1,26 +1,37 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef } from "react"
 
-export function useParallax(speed: number) {
-  const [offset, setOffset] = useState(0)
+/**
+ * Moves an element at `speed` times the scroll distance. The transform is
+ * written straight to the element, so scrolling never re-renders React.
+ * Stops once the page has scrolled well past the first screen.
+ */
+export function useParallax<T extends HTMLElement>(speed: number) {
+  const ref = useRef<T>(null)
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    if (prefersReducedMotion) return
+    const node = ref.current
+    if (!node) return
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
 
-    let frame: number
+    let frame = 0
 
-    const handleScroll = () => {
-      cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(() => setOffset(window.scrollY * speed))
+    const update = () => {
+      const offset = Math.min(window.scrollY, window.innerHeight * 1.5) * speed
+      node.style.transform = `translate3d(0, ${offset}px, 0)`
     }
 
-    handleScroll()
-    window.addEventListener("scroll", handleScroll, { passive: true })
+    const onScroll = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(update)
+    }
+
+    update()
+    window.addEventListener("scroll", onScroll, { passive: true })
     return () => {
       cancelAnimationFrame(frame)
-      window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("scroll", onScroll)
     }
   }, [speed])
 
-  return offset
+  return ref
 }
