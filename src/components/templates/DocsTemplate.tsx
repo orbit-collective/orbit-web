@@ -13,6 +13,8 @@ interface DocsTemplateProps {
   activeCategory?: string
   activeSlug?: string
   headings?: DocHeading[]
+  /** False while the article body is still loading, so the contents list waits for it. */
+  contentReady?: boolean
   children: ReactNode
 }
 
@@ -21,6 +23,7 @@ export function DocsTemplate({
   activeCategory,
   activeSlug,
   headings = [],
+  contentReady = true,
   children,
 }: DocsTemplateProps) {
   const currentHref = activeSlug
@@ -54,7 +57,7 @@ export function DocsTemplate({
             </div>
           ) : null}
         </main>
-        <DocsToc headings={headings} />
+        <DocsToc headings={headings} ready={contentReady} />
       </div>
       <Footer />
     </div>
