@@ -1,6 +1,8 @@
 import { Bug, Search, SquareCheck } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
+import type { CSSProperties } from "react"
 import { cn } from "../../lib/cn"
+import { motionVars } from "./motionVars"
 
 function Key({ children, tone = "light" }: { children: string; tone?: "light" | "dark" }) {
   return (
@@ -42,13 +44,18 @@ const results: Result[] = [
 export function CommandPaletteView() {
   return (
     <div className="flex h-full items-start justify-center bg-[var(--bg-color)]">
-      <div className="relative flex w-full flex-col overflow-hidden rounded-2xl border border-[var(--border-color)] bg-[var(--bg-color)] shadow-2xl">
+      <div className="m-open relative flex w-full flex-col overflow-hidden rounded-2xl border border-[var(--border-color)] bg-[var(--bg-color)] shadow-2xl">
         <div className="flex h-[52px] items-center gap-3 border-b border-[var(--border-color)] px-4">
           <Search size={16} className="shrink-0 text-[var(--text-gray-color)]" />
-          <span className="min-w-0 flex-1 text-[15px] text-[var(--text-color)]">#keyboard</span>
+          <span className="min-w-0 flex-1 text-[15px] text-[var(--text-color)]">
+            {/* The query is typed out after the palette opens; the results follow it. */}
+            <span className="m-type" style={{ ...motionVars({ base: "250ms" }), "--m-steps": 9 } as CSSProperties}>
+              #keyboard
+            </span>
+          </span>
         </div>
         <div className="p-1.5">
-          <div className="mb-1 last:mb-0">
+          <div className="m-rise mb-1 last:mb-0" style={motionVars({ base: "1000ms", y: "4px" })}>
             <div className="px-3 pt-2 pb-1 text-[10px] font-bold tracking-[0.1em] text-[var(--text-gray-color)] uppercase">
               Issues
             </div>
