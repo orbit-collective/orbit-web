@@ -6,7 +6,7 @@ export function AppFrame({ children, className }: { children: ReactNode; classNa
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-xl border border-line-strong bg-[#08090a] shadow-2xl shadow-black/40",
+        "overflow-hidden rounded-xl bg-[#08090a] shadow-2xl shadow-black/40",
         className,
       )}
     >
