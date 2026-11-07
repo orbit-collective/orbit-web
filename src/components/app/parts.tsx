@@ -1,4 +1,4 @@
-import { Bug, Clock, Rocket, SignalHigh, SignalLow, SignalMedium, SquareCheck } from "lucide-react"
+import { Bug, Rocket, SignalHigh, SignalLow, SignalMedium, SquareCheck } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import { cn } from "../../lib/cn"
 import type { Label, Person, Priority, Status, IssueType } from "./data"
@@ -76,16 +76,6 @@ export function Avatar({ person, size = "md" }: { person: Person | null; size?: 
       )}
     >
       <span className="font-medium text-[var(--text-color)]">{person ? person.name[0] : "?"}</span>
-    </div>
-  )
-}
-
-/** The "2h ago" cell of the list: a clock and a relative time. */
-export function UpdatedAt({ children }: { children: string }) {
-  return (
-    <div className="flex items-center gap-1">
-      <Clock size={12} />
-      {children}
     </div>
   )
 }
