@@ -1,5 +1,6 @@
 import { Button } from "../atoms/Button"
 import { Reveal } from "../atoms/Reveal"
+import { ReleaseBadge } from "../molecules/ReleaseBadge"
 import { useParallax } from "../../hooks/useParallax"
 import { OrbitGraphic } from "./OrbitGraphic"
 
@@ -10,6 +11,7 @@ export function Hero() {
     <section className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-20 md:grid-cols-2 md:gap-16 md:py-28">
       <div>
         <Reveal eager>
+          <ReleaseBadge className="mb-6" />
           <h1 className="text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
             Plan the work. Track the progress. Ship with clarity.
           </h1>
