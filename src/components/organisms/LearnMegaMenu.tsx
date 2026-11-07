@@ -23,7 +23,7 @@ import {
 import type { LucideIcon } from "lucide-react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import { getLangIndex } from "../../lib/docs"
+import docsNav from "../../generated/docs-nav.json"
 import { Button } from "../atoms/Button"
 
 const MAX_CATEGORIES = 6
@@ -59,8 +59,7 @@ function getCategoryIcon(slug: string): LucideIcon {
 }
 
 export function LearnMegaMenu() {
-  const allCategories = getLangIndex(DEFAULT_LANG)?.categories ?? []
-  const categories = allCategories.slice(0, MAX_CATEGORIES)
+  const categories = docsNav.slice(0, MAX_CATEGORIES)
   const [imageFailed, setImageFailed] = useState(false)
 
   return (
@@ -98,7 +97,7 @@ export function LearnMegaMenu() {
                       <span className="min-w-0 pt-0.5">
                         <span className="block text-sm font-medium text-ink">{category.title}</span>
                         <span className="mt-0.5 line-clamp-1 block text-xs leading-relaxed text-ink-muted">
-                          {truncate(category.readme.description, MAX_DESCRIPTION_LENGTH)}
+                          {truncate(category.description, MAX_DESCRIPTION_LENGTH)}
                         </span>
                       </span>
                     </Link>

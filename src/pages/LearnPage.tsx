@@ -2,7 +2,14 @@ import { useParams } from "react-router-dom"
 import { Seo, SITE_URL } from "../components/atoms/Seo"
 import { DocsContent } from "../components/organisms/DocsContent"
 import { DocsTemplate } from "../components/templates/DocsTemplate"
-import { getAlternatePaths, getCategory, getGuide, getLangIndex } from "../lib/docs"
+import { useDocContent } from "../hooks/useDocContent"
+import {
+  getAlternatePaths,
+  getCategory,
+  getGuide,
+  getLangIndex,
+  resolveContentKey,
+} from "../lib/docs"
 import { NotFoundPage } from "./NotFoundPage"
 
 interface BreadcrumbItem {
@@ -25,6 +32,7 @@ function buildBreadcrumbJsonLd(items: BreadcrumbItem[]) {
 
 export function LearnPage() {
   const { lang = "en", category, slug } = useParams()
+  const content = useDocContent(resolveContentKey(lang, category, slug)) ?? ""
 
   const langIndex = getLangIndex(lang)
   if (!langIndex) {
@@ -45,7 +53,7 @@ export function LearnPage() {
           ])}
         />
         <DocsTemplate lang={lang} headings={langIndex.headings}>
-          <DocsContent lang={lang} content={langIndex.content} githubUrl={langIndex.githubUrl} />
+          <DocsContent lang={lang} content={content} githubUrl={langIndex.githubUrl} />
         </DocsTemplate>
       </>
     )
@@ -75,7 +83,7 @@ export function LearnPage() {
             lang={lang}
             category={category}
             eyebrow={categoryData.title}
-            content={categoryData.readme.content}
+            content={content}
             githubUrl={categoryData.readme.githubUrl}
           />
         </DocsTemplate>
@@ -107,7 +115,7 @@ export function LearnPage() {
           lang={lang}
           category={category}
           eyebrow={categoryData.title}
-          content={guide.content}
+          content={content}
           githubUrl={guide.githubUrl}
         />
       </DocsTemplate>

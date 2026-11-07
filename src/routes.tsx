@@ -6,9 +6,16 @@ import { DownloadPage } from "./pages/DownloadPage"
 import { HomePage } from "./pages/HomePage"
 import { NotFoundPage } from "./pages/NotFoundPage"
 
-const LazyLearnPage = lazy(() =>
-  import("./pages/LearnPage").then((module) => ({ default: module.LearnPage })),
-)
+// The docs chunk, plus the body of the page being opened, so the first render
+// already has its article instead of showing an empty one while it loads.
+const LazyLearnPage = lazy(async () => {
+  const [{ LearnPage }, { preloadDocRoute }] = await Promise.all([
+    import("./pages/LearnPage"),
+    import("./lib/docs"),
+  ])
+  await preloadDocRoute(window.location.pathname)
+  return { default: LearnPage }
+})
 
 interface AppRoutesProps {
   /** Override the /learn route's element (used by the prerender script, which

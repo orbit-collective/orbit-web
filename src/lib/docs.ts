@@ -1,18 +1,15 @@
-import GithubSlugger from "github-slugger"
-import { buildGithubUrl } from "./docLinks"
+import index from "../generated/docs-index.json"
+import type { DocHeading } from "./docsParse"
 
-export interface DocHeading {
-  depth: 2 | 3
-  text: string
-  slug: string
-}
+export type { DocHeading }
 
 export interface DocGuide {
   slug: string
+  /** Markdown file name inside the category folder, e.g. "01-add-a-thing.md". */
+  file: string
   title: string
   description: string
   order: number
-  content: string
   category: string
   lang: string
   githubUrl: string
@@ -30,161 +27,97 @@ export interface DocLang {
   lang: string
   title: string
   description: string
-  content: string
   githubUrl: string
   headings: DocHeading[]
   categories: DocCategory[]
 }
 
-const files = import.meta.glob("/src/content/docs/**/*.md", {
+type IndexedGuide = Omit<DocGuide, "category" | "lang">
+interface IndexedLang extends Omit<DocLang, "categories"> {
+  categories: {
+    slug: string
+    title: string
+    readme: IndexedGuide
+    guides: IndexedGuide[]
+  }[]
+}
+
+const docsTree: DocLang[] = (index as IndexedLang[]).map((entry) => ({
+  ...entry,
+  categories: entry.categories.map((category) => ({
+    ...category,
+    readme: { ...category.readme, category: category.slug, lang: entry.lang },
+    guides: category.guides.map((guide) => ({ ...guide, category: category.slug, lang: entry.lang })),
+  })),
+}))
+
+// Page bodies are not bundled: each .md becomes its own tiny chunk that is
+// fetched when the page is opened (or hovered, see prefetchDocContent).
+const contentLoaders = import.meta.glob("/src/content/docs/**/*.md", {
   query: "?raw",
   import: "default",
-  eager: true,
-}) as Record<string, string>
+}) as Record<string, () => Promise<string>>
 
-function extractTitle(content: string, fallback: string): string {
-  const match = content.match(/^#\s+(.+)$/m)
-  return match ? match[1].trim() : fallback
+const contentCache = new Map<string, string>()
+const pendingContent = new Map<string, Promise<string>>()
+
+/** Key of a page body: "en/README.md", "en/alerts/README.md", "en/alerts/01-x.md". */
+export function docContentKey(lang: string, category: string | undefined, file: string): string {
+  return category ? `${lang}/${category}/${file}` : `${lang}/${file}`
 }
 
-const MAX_DESCRIPTION_LENGTH = 155
+/** Finds the content key for a /learn route, or undefined if there is no such page. */
+export function resolveContentKey(lang: string, category?: string, slug?: string): string | undefined {
+  const langIndex = getLangIndex(lang)
+  if (!langIndex) return undefined
+  if (!category) return docContentKey(lang, undefined, "README.md")
 
-function extractDescription(content: string): string {
-  const withoutH1 = content.replace(/^#\s+.+$/m, "")
-  const paragraphs = withoutH1
-    .split(/\n\s*\n/)
-    .map((paragraph) => paragraph.trim())
-    .filter((paragraph) => paragraph.length > 0 && !paragraph.startsWith("#"))
+  const categoryData = getCategory(lang, category)
+  if (!categoryData) return undefined
+  if (!slug) return docContentKey(lang, category, categoryData.readme.file)
 
-  const plain = (paragraphs[0] ?? "")
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-    .replace(/[*_`]/g, "")
-    .replace(/\s+/g, " ")
-    .trim()
-
-  return plain.length > MAX_DESCRIPTION_LENGTH
-    ? `${plain.slice(0, MAX_DESCRIPTION_LENGTH).trimEnd()}…`
-    : plain
+  const guide = getGuide(lang, category, slug)
+  return guide ? docContentKey(lang, category, guide.file) : undefined
 }
 
-function stripInlineMarkdown(text: string): string {
-  return text
-    .replace(/`([^`]+)`/g, "$1")
-    .replace(/\*\*([^*]+)\*\*/g, "$1")
-    .replace(/\*([^*]+)\*/g, "$1")
-    .replace(/_([^_]+)_/g, "$1")
-    .trim()
+export function getCachedDocContent(key: string): string | undefined {
+  return contentCache.get(key)
 }
 
-/** Mirrors rehype-slug (same github-slugger version) so these ids match the
- * ones actually rendered onto <h2>/<h3> elements, for the "On this page" nav. */
-function extractHeadings(content: string): DocHeading[] {
-  const slugger = new GithubSlugger()
-  const headings: DocHeading[] = []
-  const regex = /^(#{2,3})\s+(.+)$/gm
-  let match: RegExpExecArray | null
+export function loadDocContent(key: string): Promise<string> {
+  const cached = contentCache.get(key)
+  if (cached !== undefined) return Promise.resolve(cached)
 
-  while ((match = regex.exec(content)) !== null) {
-    const text = stripInlineMarkdown(match[2])
-    headings.push({ depth: match[1].length as 2 | 3, text, slug: slugger.slug(text) })
-  }
+  const pending = pendingContent.get(key)
+  if (pending) return pending
 
-  return headings
+  const loader = contentLoaders[`/src/content/docs/${key}`]
+  if (!loader) return Promise.reject(new Error(`Unknown doc page: ${key}`))
+
+  const request = loader()
+    .then((content) => {
+      contentCache.set(key, content)
+      return content
+    })
+    .finally(() => pendingContent.delete(key))
+
+  pendingContent.set(key, request)
+  return request
 }
 
-function parseFilename(filename: string): { slug: string; order: number } {
-  const withoutExt = filename.replace(/\.md$/, "")
-  const numbered = withoutExt.match(/^(\d+)-(.+)$/)
-  if (numbered) {
-    return { slug: numbered[2], order: Number(numbered[1]) }
-  }
-  return { slug: withoutExt, order: 0 }
+/** Warms the cache for a page the reader is likely to open next. Never throws. */
+export function prefetchDocContent(key: string | undefined): void {
+  if (!key || contentCache.has(key)) return
+  loadDocContent(key).catch(() => {})
 }
 
-interface CategoryDraft {
-  slug: string
-  readme?: DocGuide
-  guides: DocGuide[]
+/** Loads the body of a "/learn/..." route (used before the first render). */
+export function preloadDocRoute(pathname: string): Promise<unknown> {
+  const match = pathname.match(/^\/learn\/([a-z]{2})(?:\/([^/]+)(?:\/([^/]+))?)?\/?$/)
+  if (!match) return Promise.resolve()
+  const key = resolveContentKey(match[1], match[2], match[3])
+  return key ? loadDocContent(key).catch(() => {}) : Promise.resolve()
 }
-
-interface LangDraft {
-  readmeContent: string
-  categories: Map<string, CategoryDraft>
-}
-
-const langDrafts = new Map<string, LangDraft>()
-
-for (const [path, content] of Object.entries(files)) {
-  const relative = path.replace("/src/content/docs/", "")
-  const segments = relative.split("/")
-
-  if (segments.length === 2) {
-    const [lang] = segments
-    const draft = langDrafts.get(lang) ?? { readmeContent: "", categories: new Map() }
-    draft.readmeContent = content
-    langDrafts.set(lang, draft)
-    continue
-  }
-
-  if (segments.length === 3) {
-    const [lang, category, filename] = segments
-    const draft = langDrafts.get(lang) ?? { readmeContent: "", categories: new Map() }
-    const categoryDraft: CategoryDraft = draft.categories.get(category) ?? {
-      slug: category,
-      guides: [],
-    }
-
-    if (filename === "README.md") {
-      categoryDraft.readme = {
-        slug: "README",
-        title: extractTitle(content, category),
-        description: extractDescription(content),
-        order: 0,
-        content,
-        category,
-        lang,
-        githubUrl: buildGithubUrl(lang, category, filename),
-        headings: extractHeadings(content),
-      }
-    } else {
-      const { slug, order } = parseFilename(filename)
-      categoryDraft.guides.push({
-        slug,
-        title: extractTitle(content, slug),
-        description: extractDescription(content),
-        order,
-        content,
-        category,
-        lang,
-        headings: extractHeadings(content),
-        githubUrl: buildGithubUrl(lang, category, filename),
-      })
-    }
-
-    draft.categories.set(category, categoryDraft)
-    langDrafts.set(lang, draft)
-  }
-}
-
-const docsTree: DocLang[] = Array.from(langDrafts.entries())
-  .map(([lang, draft]) => ({
-    lang,
-    title: extractTitle(draft.readmeContent, lang),
-    description: extractDescription(draft.readmeContent),
-    content: draft.readmeContent,
-    githubUrl: buildGithubUrl(lang, undefined, "README.md"),
-    headings: extractHeadings(draft.readmeContent),
-    categories: Array.from(draft.categories.values())
-      .filter((category): category is CategoryDraft & { readme: DocGuide } => category.readme !== undefined)
-      .map((category) => ({
-        slug: category.slug,
-        title: category.readme.title,
-        readme: category.readme,
-        guides: [...category.guides].sort((a, b) => a.order - b.order),
-      }))
-      .sort((a, b) => a.slug.localeCompare(b.slug)),
-  }))
-  .sort((a, b) => a.lang.localeCompare(b.lang))
 
 export function getDocsTree(): DocLang[] {
   return docsTree

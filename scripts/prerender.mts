@@ -6,7 +6,7 @@ import { renderToString } from "react-dom/server"
 import { StaticRouter } from "react-router-dom"
 import { AppRoutes } from "../src/routes"
 import { LearnPage } from "../src/pages/LearnPage"
-import { getAvailableLangs, getFlatPages } from "../src/lib/docs"
+import { getAvailableLangs, getFlatPages, preloadDocRoute } from "../src/lib/docs"
 
 const projectRoot = dirname(dirname(fileURLToPath(import.meta.url)))
 const distDir = join(projectRoot, "dist")
@@ -49,6 +49,9 @@ function outputPathFor(path: string): string {
 
 for (const path of paths) {
   const isLearnRoute = path.startsWith("/learn")
+
+  // renderToString can't wait, so the page body must already be in the cache.
+  if (isLearnRoute) await preloadDocRoute(path)
 
   const appHtml = renderToString(
     createElement(
