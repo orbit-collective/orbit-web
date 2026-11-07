@@ -77,7 +77,6 @@ export const labels = {
   design: { name: "design", color: "#673ab7" },
   performance: { name: "performance", color: "#607d8b" },
   chore: { name: "chore", color: "#009688" },
-  request: { name: "customer-request", color: "#7e57c2" },
 } satisfies Record<string, Label>
 
 export const issues: Issue[] = [
@@ -139,7 +138,7 @@ export const issues: Issue[] = [
     status: statuses.todo,
     priority: priorities.high,
     assignee: people.jane,
-    labels: [labels.feature, labels.request],
+    labels: [labels.feature],
     updated: "3d ago",
   },
 ]
