@@ -22,7 +22,7 @@ import type { ReactNode } from "react"
 /** A real Orbit screen inside a card, never wider than it is in the app. */
 function Screen({ label, size, children }: { label: string; size: { width: number; height: number }; children: ReactNode }) {
   return (
-    <div className="w-full overflow-hidden rounded-lg border border-line-strong" style={{ maxWidth: size.width }}>
+    <div className="w-full overflow-hidden rounded-lg" style={{ maxWidth: size.width }}>
       <ScaledFrame {...size} label={label} initialScale={0.8} minScale={0.55}>
         {children}
       </ScaledFrame>
