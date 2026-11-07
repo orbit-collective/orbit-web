@@ -39,9 +39,18 @@ export function DocsTemplate({
         <main id="main-content" tabIndex={-1} className="min-w-0 flex-1 pb-16 outline-none">
           {children}
           {previous || next ? (
-            <div className="mt-16 flex items-start justify-between gap-4">
-              <div>{previous ? <DocsPreviousLink title={previous.title} href={previous.href} /> : null}</div>
-              <div>{next ? <DocsNextLink title={next.title} href={next.href} /> : null}</div>
+            // Two equal cells (stacked on a phone), so a long title wraps instead of pushing the page wider.
+            <div className="mt-16 grid gap-3 sm:grid-cols-2 sm:gap-4">
+              {previous ? (
+                <div className="min-w-0">
+                  <DocsPreviousLink title={previous.title} href={previous.href} />
+                </div>
+              ) : null}
+              {next ? (
+                <div className="min-w-0 sm:col-start-2">
+                  <DocsNextLink title={next.title} href={next.href} />
+                </div>
+              ) : null}
             </div>
           ) : null}
         </main>
