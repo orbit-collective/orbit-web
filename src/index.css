@@ -96,7 +96,7 @@
   animation-fill-mode: both;
   animation-timing-function: var(--m-ease);
   animation-delay: calc(
-    var(--m-base, 0ms) + min(var(--i, 0), var(--m-cap, 10)) * var(--m-step, 30ms)
+    var(--m-stage-delay, 0ms) + var(--m-base, 0ms) + min(var(--i, 0), var(--m-cap, 10)) * var(--m-step, 30ms)
   );
 }
 
