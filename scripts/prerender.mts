@@ -21,12 +21,18 @@ const template = readFileSync(templatePath, "utf8")
 
 // The fonts the first screen is set in. Without a preload the browser only
 // finds them after downloading and parsing the CSS, so text shows late.
-const PRELOADED_FONT_WEIGHTS = [400, 500, 600]
-const fontPreloads = readdirSync(join(distDir, "assets"))
-  .filter((file) => PRELOADED_FONT_WEIGHTS.some((weight) => file.startsWith(`figtree-latin-${weight}-normal-`)))
-  .filter((file) => file.endsWith(".woff2"))
-  .map((file) => `<link rel="preload" as="font" type="font/woff2" href="/assets/${file}" crossorigin/>`)
-  .join("")
+function preloadFonts(family: string, weights: number[]): string {
+  return readdirSync(join(distDir, "assets"))
+    .filter((file) => weights.some((weight) => file.startsWith(`${family}-latin-${weight}-normal-`)))
+    .filter((file) => file.endsWith(".woff2"))
+    .map((file) => `<link rel="preload" as="font" type="font/woff2" href="/assets/${file}" crossorigin/>`)
+    .join("")
+}
+
+const siteFontPreloads = preloadFonts("figtree", [400, 500, 600])
+// Poppins is only used by the Orbit app mockups, which are on the home page and /about.
+const appFontPreloads = preloadFonts("poppins", [400, 500, 600])
+const PAGES_WITH_APP_MOCKUPS = new Set(["/", "/about"])
 
 const staticPaths = ["/", "/about", "/download"]
 // Served by netlify.toml for any URL that has no file, with a real 404 status.
@@ -87,7 +93,10 @@ for (const path of paths) {
     .replace(/<html[^>]*>/, `<html lang="${langFor(path)}">`)
     .replace(/<title>.*?<\/title>/s, "")
     .replace(/<meta\s+name="description"[^>]*\/>/s, "")
-    .replace("</head>", `${fontPreloads}${head}</head>`)
+    .replace(
+      "</head>",
+      `${siteFontPreloads}${PAGES_WITH_APP_MOCKUPS.has(path) ? appFontPreloads : ""}${head}</head>`,
+    )
     .replace('<div id="root"></div>', `<div id="root">${body}</div>`)
 
   const outputPath = outputPathFor(path)
