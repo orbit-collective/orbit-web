@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 import { Suspense, createElement } from "react"
@@ -18,6 +18,15 @@ if (!existsSync(templatePath)) {
 }
 
 const template = readFileSync(templatePath, "utf8")
+
+// The fonts the first screen is set in. Without a preload the browser only
+// finds them after downloading and parsing the CSS, so text shows late.
+const PRELOADED_FONT_WEIGHTS = [400, 500, 600]
+const fontPreloads = readdirSync(join(distDir, "assets"))
+  .filter((file) => PRELOADED_FONT_WEIGHTS.some((weight) => file.startsWith(`figtree-latin-${weight}-normal-`)))
+  .filter((file) => file.endsWith(".woff2"))
+  .map((file) => `<link rel="preload" as="font" type="font/woff2" href="/assets/${file}" crossorigin/>`)
+  .join("")
 
 const staticPaths = ["/", "/about", "/download"]
 // Served by netlify.toml for any URL that has no file, with a real 404 status.
@@ -78,7 +87,7 @@ for (const path of paths) {
     .replace(/<html[^>]*>/, `<html lang="${langFor(path)}">`)
     .replace(/<title>.*?<\/title>/s, "")
     .replace(/<meta\s+name="description"[^>]*\/>/s, "")
-    .replace("</head>", `${head}</head>`)
+    .replace("</head>", `${fontPreloads}${head}</head>`)
     .replace('<div id="root"></div>', `<div id="root">${body}</div>`)
 
   const outputPath = outputPathFor(path)
