@@ -1,6 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "../../lib/cn"
 import { priorities } from "./data"
+import { motionVars } from "./motionVars"
 import type { Priority } from "./data"
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -36,8 +37,9 @@ const WEEKS = 4
 function EventChip({ event }: { event: Event }) {
   return (
     <div
-      className="flex items-center rounded-r-md border-l-2 px-2 py-1 text-left"
+      className="m-rise flex items-center rounded-r-md border-l-2 px-2 py-1 text-left"
       style={{
+        ...motionVars({ y: "5px" }),
         borderLeftColor: event.priority.color,
         backgroundColor: `color-mix(in srgb, ${event.priority.color} 10%, transparent 90%)`,
       }}
@@ -47,13 +49,15 @@ function EventChip({ event }: { event: Event }) {
   )
 }
 
-function Day({ day, column }: { day: number; column: number }) {
+function Day({ day, column, row }: { day: number; column: number; row: number }) {
   const events = EVENTS[day] ?? []
 
   return (
     <div
+      // A wave runs across the grid from the top left, 20 ms per step.
+      style={motionVars({ i: column + row, step: "20ms", cap: 99 })}
       className={cn(
-        "relative flex min-h-[132px] flex-col gap-1.5 border-b border-[var(--border-color)] p-2.5",
+        "m-cell relative flex min-h-[132px] flex-col gap-1.5 border-b border-[var(--border-color)] p-2.5",
         column < 6 && "border-r",
       )}
     >
@@ -130,7 +134,7 @@ export function CalendarView() {
           </div>
           <div className="grid grid-cols-7">
             {Array.from({ length: WEEKS * 7 }, (_, index) => (
-              <Day key={index} day={index + 1} column={index % 7} />
+              <Day key={index} day={index + 1} column={index % 7} row={Math.floor(index / 7)} />
             ))}
           </div>
         </div>
