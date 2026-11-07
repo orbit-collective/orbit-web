@@ -5,6 +5,11 @@ interface MotionStageOptions {
   autoplay?: boolean
   /** Whether the stage is the one being shown. Turning it on again replays it. */
   active?: boolean
+  /**
+   * How much of the stage must be on screen to play it. A stage taller than
+   * the screen can never show 25 % of itself, so tall ones pass a smaller value.
+   */
+  threshold?: number
 }
 
 /**
@@ -16,7 +21,7 @@ interface MotionStageOptions {
  * in React state, so animating never re-renders anything. Reduced motion
  * leaves the stage without m-on, which shows its finished state.
  */
-export function useMotionStage<T extends HTMLElement>({ autoplay = false, active = true }: MotionStageOptions = {}) {
+export function useMotionStage<T extends HTMLElement>({ autoplay = false, active = true, threshold = 0.25 }: MotionStageOptions = {}) {
   const ref = useRef<T>(null)
   const isFirstRun = useRef(true)
 
@@ -48,11 +53,11 @@ export function useMotionStage<T extends HTMLElement>({ autoplay = false, active
         element.dataset.motion = "playing"
         observer.disconnect()
       },
-      { threshold: 0.25 },
+      { threshold },
     )
     observer.observe(element)
     return () => observer.disconnect()
-  }, [autoplay, active])
+  }, [autoplay, active, threshold])
 
   return ref
 }

@@ -74,7 +74,7 @@
 }
 
 /*
- * Orbit's motion language, for the app mockups. The app animates with
+ * Orbit's motion language, for the app mockups and the changelog. The app animates with
  * framer-motion; these are the same easing, durations and staggers as plain
  * CSS (see resources/js/utils/motion.ts in the Orbit repository), so the
  * mockups move the way the real screens do without shipping a library.
@@ -86,13 +86,13 @@
  * An element's delay is its place in a list (--i) times a step, capped, which
  * is the app's rowDelay.
  */
-.orbit-app {
+:root {
   --m-ease: cubic-bezier(0.22, 1, 0.36, 1);
   /* Close to the app's spring (stiffness 380, damping 32): a quick settle with a hint of overshoot. */
   --m-spring: cubic-bezier(0.34, 1.35, 0.64, 1);
 }
 
-.orbit-app .m-on :is(.m-rise, .m-card, .m-pop, .m-cell, .m-slide, .m-line, .m-bar-h, .m-bar-w, .m-draw, .m-open, .m-type) {
+.m-on :is(.m-rise, .m-card, .m-pop, .m-cell, .m-slide, .m-line, .m-bar-h, .m-bar-w, .m-draw, .m-open, .m-type) {
   animation-fill-mode: both;
   animation-timing-function: var(--m-ease);
   animation-delay: calc(
@@ -100,79 +100,79 @@
   );
 }
 
-.orbit-app .m-on[data-motion="armed"] :is(.m-rise, .m-card, .m-pop, .m-cell, .m-slide, .m-line, .m-bar-h, .m-bar-w, .m-draw, .m-open, .m-type) {
+.m-on[data-motion="armed"] :is(.m-rise, .m-card, .m-pop, .m-cell, .m-slide, .m-line, .m-bar-h, .m-bar-w, .m-draw, .m-open, .m-type) {
   animation-play-state: paused;
 }
 
-.orbit-app .m-on[data-motion="playing"] :is(.m-rise, .m-card, .m-pop, .m-cell, .m-slide, .m-line, .m-bar-h, .m-bar-w, .m-draw, .m-open, .m-type) {
+.m-on[data-motion="playing"] :is(.m-rise, .m-card, .m-pop, .m-cell, .m-slide, .m-line, .m-bar-h, .m-bar-w, .m-draw, .m-open, .m-type) {
   animation-play-state: running;
 }
 
 /* A row, card or block rising into place (rowIn: 8 px; a page section: 16 px; a column: 18 px). */
-.orbit-app .m-on .m-rise {
+.m-on .m-rise {
   animation-name: orbit-rise;
   animation-duration: 400ms;
 }
 
 /* A board card: rises with a little scale, like the app's spring. */
-.orbit-app .m-on .m-card {
+.m-on .m-card {
   animation-name: orbit-card;
   animation-duration: 420ms;
   animation-timing-function: var(--m-spring);
 }
 
 /* An icon or avatar popping in. */
-.orbit-app .m-on .m-pop {
+.m-on .m-pop {
   animation-name: orbit-pop;
   animation-duration: 450ms;
   animation-timing-function: var(--m-spring);
 }
 
 /* A calendar cell: the wave across the grid. */
-.orbit-app .m-on .m-cell {
+.m-on .m-cell {
   animation-name: orbit-cell;
   animation-duration: 400ms;
 }
 
 /* An activity entry sliding in from the left. */
-.orbit-app .m-on .m-slide {
+.m-on .m-slide {
   animation-name: orbit-slide;
   animation-duration: 400ms;
 }
 
 /* A divider line drawing out from the left. */
-.orbit-app .m-on .m-line {
+.m-on .m-line {
   animation-name: orbit-line;
   animation-duration: 800ms;
   transform-origin: left;
 }
 
 /* Bars filling: --m-to is the final height or width. */
-.orbit-app .m-on .m-bar-h {
+.m-on .m-bar-h {
   animation-name: orbit-bar-h;
   animation-duration: 800ms;
 }
 
-.orbit-app .m-on .m-bar-w {
+.m-on .m-bar-w {
   animation-name: orbit-bar-w;
   animation-duration: 800ms;
 }
 
 /* A progress ring drawing itself: --m-from is the full circumference, --m-to the final offset. */
-.orbit-app .m-on .m-draw {
+.m-on .m-draw {
   animation-name: orbit-draw;
   animation-duration: 800ms;
 }
 
 /* The command palette opening (the app's palette-in). */
-.orbit-app .m-on .m-open {
+.m-on .m-open {
   animation-name: orbit-open;
   animation-duration: 120ms;
   animation-timing-function: ease-out;
 }
 
 /* Text typed out letter by letter: --m-steps is how many characters it has. */
-.orbit-app .m-on .m-type {
+.m-on .m-type {
   animation-name: orbit-type;
   animation-duration: 700ms;
   animation-timing-function: steps(var(--m-steps, 9), end);
@@ -264,7 +264,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .orbit-app .m-on :is(.m-rise, .m-card, .m-pop, .m-cell, .m-slide, .m-line, .m-bar-h, .m-bar-w, .m-draw, .m-open, .m-type) {
+  .m-on :is(.m-rise, .m-card, .m-pop, .m-cell, .m-slide, .m-line, .m-bar-h, .m-bar-w, .m-draw, .m-open, .m-type) {
     animation: none !important;
   }
 }
