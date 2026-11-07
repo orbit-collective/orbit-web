@@ -8,6 +8,7 @@ import { isExternalDocLink, resolveDocLink } from "../../lib/docLinks"
 import { getPreviewForPath } from "../../lib/docs"
 import { rehypePrism } from "../../lib/prism"
 import { CodeBlock } from "../molecules/CodeBlock"
+import { DocHeading } from "../molecules/DocHeading"
 import { DocLinkPreviewCard } from "../molecules/DocLinkPreviewCard"
 import { ViewOnGithubLink } from "../molecules/ViewOnGithubLink"
 
@@ -80,6 +81,8 @@ export function DocsContent({ lang, category, eyebrow, githubUrl, content }: Doc
         components={{
           a: (props) => <DocAnchor {...props} lang={lang} category={category} />,
           pre: (props) => <CodeBlock {...props} />,
+          h2: (props) => <DocHeading level={2} {...props} />,
+          h3: (props) => <DocHeading level={3} {...props} />,
         }}
       >
         {content}
