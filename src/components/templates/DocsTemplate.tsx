@@ -36,7 +36,7 @@ export function DocsTemplate({
       <Navbar />
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-8 px-6 py-10 lg:flex-row lg:gap-12 lg:py-12">
         <DocsSidebar lang={lang} activeCategory={activeCategory} activeSlug={activeSlug} />
-        <main className="min-w-0 flex-1 pb-16">
+        <main id="main-content" tabIndex={-1} className="min-w-0 flex-1 pb-16 outline-none">
           {children}
           {previous || next ? (
             <div className="mt-16 flex items-start justify-between gap-4">

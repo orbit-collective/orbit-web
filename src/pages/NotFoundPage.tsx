@@ -16,7 +16,7 @@ export function NotFoundPage() {
         noindex
       />
       <Navbar />
-      <main className="flex flex-1 flex-col items-center justify-center px-6 py-20 text-center">
+      <main id="main-content" tabIndex={-1} className="flex flex-1 flex-col items-center justify-center px-6 py-20 text-center outline-none">
         <p className="text-sm font-medium text-ink-muted">404</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
           This page drifted out of orbit
