@@ -2,6 +2,7 @@ import { ArrowDown, Plus } from "lucide-react"
 import { cn } from "../../lib/cn"
 import { issues } from "./data"
 import type { Issue } from "./data"
+import { motionVars } from "./motionVars"
 import { Avatar, LabelChip, PriorityIcon, StatusBadge, TypeBadge } from "./parts"
 
 // Orbit lets each user hide columns; the page shows the ones that matter most.
@@ -20,9 +21,10 @@ const th =
   "sticky top-0 z-30 group relative select-none border-b border-[var(--bg-light-color)] bg-[var(--bg-color)] px-4 py-3 text-left font-medium text-[var(--text-gray-color)]"
 const cell = "px-3 py-2 border-b border-[var(--border-color)] align-middle text-[12px] font-normal"
 
-function Row({ issue }: { issue: Issue }) {
+function Row({ issue, index }: { issue: Issue; index: number }) {
   return (
-    <tr style={{ height: 44 }} className="select-none">
+    // Rows rise one after another, a little less each (the app's rowDelay, capped at 14).
+    <tr style={{ height: 44, ...motionVars({ i: index, cap: 14, y: "6px" }) }} className="m-rise select-none">
       <td className="w-[48px] border-b border-[var(--border-color)] px-2 py-2 text-center align-middle text-[12px] font-normal">
         <div className="flex items-center justify-center gap-1">
           <span className="h-3.5 w-3.5 rounded border border-[var(--border-color-strong)] bg-[var(--surface-color)] opacity-0" />
@@ -109,8 +111,8 @@ export function IssueListView() {
                   </span>
                 </td>
               </tr>
-              {issues.map((issue) => (
-                <Row key={issue.number} issue={issue} />
+              {issues.map((issue, index) => (
+                <Row key={issue.number} issue={issue} index={index} />
               ))}
             </tbody>
           </table>
