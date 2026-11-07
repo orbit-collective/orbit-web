@@ -1,6 +1,7 @@
 import type { ReactNode } from "react"
 import { cn } from "../../lib/cn"
 import { people, statuses } from "./data"
+import { motionVars } from "./motionVars"
 import { Avatar, StatusBadge } from "./parts"
 
 /** GitHub's mark, as the app draws it next to a pull request. */
@@ -58,9 +59,11 @@ const pullRequests: PullRequest[] = [
   },
 ]
 
-function PullRequestCard({ pullRequest }: { pullRequest: PullRequest }) {
+function PullRequestCard({ pullRequest, index }: { pullRequest: PullRequest; index: number }) {
   return (
-    <div className="flex flex-col gap-1 rounded-lg border border-[var(--border-color)] px-2 py-1.5 text-[var(--text-color)]">
+    <div
+      style={motionVars({ i: index, base: "300ms" })}
+      className="m-rise flex flex-col gap-1 rounded-lg border border-[var(--border-color)] px-2 py-1.5 text-[var(--text-color)]">
       <div className="flex items-center gap-1.5">
         <GithubMark />
         <span className="min-w-0 flex-1 truncate text-xs font-medium">{pullRequest.title}</span>
@@ -83,9 +86,9 @@ function PullRequestCard({ pullRequest }: { pullRequest: PullRequest }) {
   )
 }
 
-function Field({ label, children }: { label: string; children: ReactNode }) {
+function Field({ label, index, children }: { label: string; index: number; children: ReactNode }) {
   return (
-    <div className="flex flex-col items-start gap-1">
+    <div className="m-rise flex flex-col items-start gap-1" style={motionVars({ i: index })}>
       <span className="text-[10px] font-semibold tracking-wider text-[var(--text-muted-color)] uppercase">
         {label}
       </span>
@@ -98,19 +101,19 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
 export function DevelopmentView() {
   return (
     <div className="flex h-full flex-col gap-3 bg-[var(--bg-color-hover)] p-4">
-      <Field label="Status">
+      <Field label="Status" index={0}>
         <StatusBadge status={statuses.review} />
       </Field>
-      <Field label="Assignee">
+      <Field label="Assignee" index={1}>
         <span className="flex items-center gap-1.5 text-sm text-[var(--text-color)]">
           <Avatar person={people.marcus} size="sm" />
           {people.marcus.name}
         </span>
       </Field>
-      <Field label="Development">
+      <Field label="Development" index={2}>
         <div className="flex w-full flex-col gap-2">
-          {pullRequests.map((pullRequest) => (
-            <PullRequestCard key={pullRequest.number} pullRequest={pullRequest} />
+          {pullRequests.map((pullRequest, index) => (
+            <PullRequestCard key={pullRequest.number} pullRequest={pullRequest} index={index} />
           ))}
         </div>
       </Field>
