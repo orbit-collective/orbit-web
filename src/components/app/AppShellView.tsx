@@ -18,6 +18,7 @@ import type { LucideIcon } from "lucide-react"
 import { cn } from "../../lib/cn"
 import { BoardView } from "./BoardView"
 import { people } from "./data"
+import { motionVars } from "./motionVars"
 import { Avatar } from "./parts"
 
 /** A keyboard hint chip, like the Alt B / Alt P ones in the sidebar. */
@@ -144,7 +145,10 @@ const tabs = [
 
 function Header() {
   return (
-    <header className="flex shrink-0 flex-col gap-3 border-b border-solid border-[var(--bg-light-color)] bg-[var(--bg-color-hover)] px-6 py-3">
+    <header
+      // A page section rises 16 px before the board under it.
+      style={motionVars({ y: "16px" })}
+      className="m-rise flex shrink-0 flex-col gap-3 border-b border-solid border-[var(--bg-light-color)] bg-[var(--bg-color-hover)] px-6 py-3">
       <div className="flex items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-3">
           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent-color-opacity)] text-[var(--accent-color)]">

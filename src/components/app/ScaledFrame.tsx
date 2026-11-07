@@ -27,6 +27,8 @@ interface ScaledFrameProps {
   active?: boolean
   /** Start playing on first paint, from the prerendered HTML. */
   autoplay?: boolean
+  /** Hold the animations back by this much (a CSS time, e.g. "500ms"). */
+  delay?: string
 }
 
 /**
@@ -50,6 +52,7 @@ export function ScaledFrame({
   stage = true,
   active,
   autoplay,
+  delay,
 }: ScaledFrameProps) {
   const frameRef = useRef<HTMLDivElement>(null)
   const sizerRef = useRef<HTMLDivElement>(null)
@@ -88,7 +91,7 @@ export function ScaledFrame({
           style={{ width, height, transform: `scale(${initialScale})` }}
         >
           {stage ? (
-            <MotionStage className="h-full" active={active} autoplay={autoplay}>
+            <MotionStage className="h-full" active={active} autoplay={autoplay} delay={delay}>
               {children}
             </MotionStage>
           ) : (
