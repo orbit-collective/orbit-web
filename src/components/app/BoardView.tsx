@@ -76,7 +76,8 @@ function tint(hex: string, alpha: number): string {
   return `rgba(${(value >> 16) & 255}, ${(value >> 8) & 255}, ${value & 255}, ${alpha})`
 }
 
-function Card({ issue }: { issue: Issue }) {
+/** One issue card, as the board and the issue-adding step draw it. */
+export function IssueCard({ issue }: { issue: Issue }) {
   return (
     <div className="flex flex-col gap-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-light-color)] p-3 text-left shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
       <div className="flex items-center justify-between gap-2">
@@ -175,7 +176,7 @@ function Column({ column }: { column: ColumnSpec }) {
       </div>
       <div className="flex flex-1 flex-col gap-2.5 p-3">
         {column.issues.map((issue) => (
-          <Card key={issue.number} issue={issue} />
+          <IssueCard key={issue.number} issue={issue} />
         ))}
       </div>
     </div>
