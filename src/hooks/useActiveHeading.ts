@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react"
 
-export function useActiveHeading(slugs: string[]): string | null {
+/**
+ * The slug of the heading currently being read. Pass `ready = false` while the
+ * headings are known but not yet on the page (a docs article still downloading):
+ * the observer attaches when it turns true, instead of looking for elements that
+ * do not exist yet and never looking again.
+ */
+export function useActiveHeading(slugs: string[], ready = true): string | null {
   const [activeSlug, setActiveSlug] = useState<string | null>(null)
   const key = slugs.join(",")
 
   useEffect(() => {
-    if (!key) return
+    if (!key || !ready) return
 
     const elements = key
       .split(",")
@@ -29,7 +35,7 @@ export function useActiveHeading(slugs: string[]): string | null {
 
     elements.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
-  }, [key])
+  }, [key, ready])
 
   return activeSlug
 }

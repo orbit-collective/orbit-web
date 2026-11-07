@@ -4,10 +4,15 @@ import type { DocHeading } from "../../lib/docs"
 
 interface DocsTocProps {
   headings: DocHeading[]
+  /** False while the article these headings belong to is still loading. */
+  ready?: boolean
 }
 
-export function DocsToc({ headings }: DocsTocProps) {
-  const activeSlug = useActiveHeading(headings.map((heading) => heading.slug))
+export function DocsToc({ headings, ready = true }: DocsTocProps) {
+  const activeSlug = useActiveHeading(
+    headings.map((heading) => heading.slug),
+    ready,
+  )
 
   if (headings.length === 0) {
     return null

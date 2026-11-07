@@ -54,7 +54,7 @@ export function LearnPage() {
             { name: "Learn", path: `/learn/${lang}` },
           ])}
         />
-        <DocsTemplate lang={lang} headings={langIndex.headings}>
+        <DocsTemplate lang={lang} headings={langIndex.headings} contentReady={doc.isReady}>
           <DocsBody doc={doc} lang={lang} githubUrl={langIndex.githubUrl} />
         </DocsTemplate>
       </>
@@ -80,7 +80,12 @@ export function LearnPage() {
             { name: categoryData.title, path: `/learn/${lang}/${category}` },
           ])}
         />
-        <DocsTemplate lang={lang} activeCategory={category} headings={categoryData.readme.headings}>
+        <DocsTemplate
+          lang={lang}
+          activeCategory={category}
+          headings={categoryData.readme.headings}
+          contentReady={doc.isReady}
+        >
           <DocsBody
             doc={doc}
             lang={lang}
@@ -112,7 +117,13 @@ export function LearnPage() {
           { name: guide.title, path: `/learn/${lang}/${category}/${slug}` },
         ])}
       />
-      <DocsTemplate lang={lang} activeCategory={category} activeSlug={slug} headings={guide.headings}>
+      <DocsTemplate
+        lang={lang}
+        activeCategory={category}
+        activeSlug={slug}
+        headings={guide.headings}
+        contentReady={doc.isReady}
+      >
         <DocsBody
           doc={doc}
           lang={lang}
