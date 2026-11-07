@@ -32,8 +32,10 @@ import {
 } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import docsNav from "../../generated/docs-nav.json"
+import { cn } from "../../lib/cn"
+import { isWithin } from "../../lib/paths"
 import { Button } from "../atoms/Button"
 
 const MAX_CATEGORIES = 6
@@ -120,12 +122,17 @@ export function LearnMegaMenu() {
     MAX_CATEGORIES,
   )
   const [imageFailed, setImageFailed] = useState(false)
+  const isCurrent = isWithin(useLocation().pathname, "/learn")
 
   return (
     <div className="group relative" onPointerEnter={warmDocs} onFocus={warmDocs}>
       <Link
         to={`/learn/${DEFAULT_LANG}`}
-        className="text-sm font-medium text-ink-muted transition-colors duration-150 ease-in-out hover:text-ink"
+        aria-current={isCurrent ? "page" : undefined}
+        className={cn(
+          "text-sm font-medium transition-colors duration-150 ease-in-out hover:text-ink",
+          isCurrent ? "text-ink" : "text-ink-muted",
+        )}
       >
         Learn
       </Link>
