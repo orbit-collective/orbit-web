@@ -14,6 +14,8 @@ dist-ssr
 
 # Fetched at build time from the orbit repo's documentation/ folder, see scripts/fetch-docs.mjs
 src/content/docs
+# Built from it by scripts/generate-docs-index.mts
+src/generated
 
 # Editor directories and files
 .vscode/*
