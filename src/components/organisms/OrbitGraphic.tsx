@@ -28,7 +28,9 @@ const innerItems = [
 export function OrbitGraphic() {
   return (
     <div
-      className="relative mx-auto aspect-square w-full max-w-[260px] sm:max-w-[340px] md:max-w-[420px]"
+      // The rings spin square boxes, whose corners briefly stick out of the graphic and
+      // widen the page on a phone. Everything visible fits inside, so clip it.
+      className="relative mx-auto aspect-square w-full max-w-[260px] overflow-clip sm:max-w-[340px] md:max-w-[420px]"
       role="img"
       aria-label="Orbit issue tracker features orbiting the product logo"
     >
