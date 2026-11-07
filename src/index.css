@@ -73,6 +73,185 @@
   background-color: var(--bg-color);
 }
 
+/*
+ * Orbit's motion language, for the app mockups. The app animates with
+ * framer-motion; these are the same easing, durations and staggers as plain
+ * CSS (see resources/js/utils/motion.ts in the Orbit repository), so the
+ * mockups move the way the real screens do without shipping a library.
+ *
+ * A mockup is a "stage" (components/app/MotionStage). Without JavaScript, or
+ * with reduced motion, it has no .m-on class and shows its finished state.
+ * With it, the stage is first "armed" (every element held at its first frame,
+ * paused) and then "playing" once it is on screen, which runs the animations.
+ * An element's delay is its place in a list (--i) times a step, capped, which
+ * is the app's rowDelay.
+ */
+.orbit-app {
+  --m-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Close to the app's spring (stiffness 380, damping 32): a quick settle with a hint of overshoot. */
+  --m-spring: cubic-bezier(0.34, 1.35, 0.64, 1);
+}
+
+.orbit-app .m-on :is(.m-rise, .m-card, .m-pop, .m-cell, .m-slide, .m-line, .m-bar-h, .m-bar-w, .m-draw, .m-open) {
+  animation-fill-mode: both;
+  animation-timing-function: var(--m-ease);
+  animation-delay: calc(
+    var(--m-base, 0ms) + min(var(--i, 0), var(--m-cap, 10)) * var(--m-step, 30ms)
+  );
+}
+
+.orbit-app .m-on[data-motion="armed"] :is(.m-rise, .m-card, .m-pop, .m-cell, .m-slide, .m-line, .m-bar-h, .m-bar-w, .m-draw, .m-open) {
+  animation-play-state: paused;
+}
+
+.orbit-app .m-on[data-motion="playing"] :is(.m-rise, .m-card, .m-pop, .m-cell, .m-slide, .m-line, .m-bar-h, .m-bar-w, .m-draw, .m-open) {
+  animation-play-state: running;
+}
+
+/* A row, card or block rising into place (rowIn: 8 px; a page section: 16 px; a column: 18 px). */
+.orbit-app .m-on .m-rise {
+  animation-name: orbit-rise;
+  animation-duration: 400ms;
+}
+
+/* A board card: rises with a little scale, like the app's spring. */
+.orbit-app .m-on .m-card {
+  animation-name: orbit-card;
+  animation-duration: 420ms;
+  animation-timing-function: var(--m-spring);
+}
+
+/* An icon or avatar popping in. */
+.orbit-app .m-on .m-pop {
+  animation-name: orbit-pop;
+  animation-duration: 450ms;
+  animation-timing-function: var(--m-spring);
+}
+
+/* A calendar cell: the wave across the grid. */
+.orbit-app .m-on .m-cell {
+  animation-name: orbit-cell;
+  animation-duration: 400ms;
+}
+
+/* An activity entry sliding in from the left. */
+.orbit-app .m-on .m-slide {
+  animation-name: orbit-slide;
+  animation-duration: 400ms;
+}
+
+/* A divider line drawing out from the left. */
+.orbit-app .m-on .m-line {
+  animation-name: orbit-line;
+  animation-duration: 800ms;
+  transform-origin: left;
+}
+
+/* Bars filling: --m-to is the final height or width. */
+.orbit-app .m-on .m-bar-h {
+  animation-name: orbit-bar-h;
+  animation-duration: 800ms;
+}
+
+.orbit-app .m-on .m-bar-w {
+  animation-name: orbit-bar-w;
+  animation-duration: 800ms;
+}
+
+/* A progress ring drawing itself: --m-from is the full circumference, --m-to the final offset. */
+.orbit-app .m-on .m-draw {
+  animation-name: orbit-draw;
+  animation-duration: 800ms;
+}
+
+/* The command palette opening (the app's palette-in). */
+.orbit-app .m-on .m-open {
+  animation-name: orbit-open;
+  animation-duration: 120ms;
+  animation-timing-function: ease-out;
+}
+
+@keyframes orbit-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--m-y, 8px));
+  }
+}
+
+@keyframes orbit-card {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+}
+
+@keyframes orbit-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+@keyframes orbit-cell {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+@keyframes orbit-slide {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+}
+
+@keyframes orbit-line {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes orbit-bar-h {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--m-to);
+  }
+}
+
+@keyframes orbit-bar-w {
+  from {
+    width: 0;
+  }
+  to {
+    width: var(--m-to);
+  }
+}
+
+@keyframes orbit-draw {
+  from {
+    stroke-dashoffset: var(--m-from);
+  }
+  to {
+    stroke-dashoffset: var(--m-to);
+  }
+}
+
+@keyframes orbit-open {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-app .m-on :is(.m-rise, .m-card, .m-pop, .m-cell, .m-slide, .m-line, .m-bar-h, .m-bar-w, .m-draw, .m-open) {
+    animation: none !important;
+  }
+}
+
 .no-scrollbar {
   scrollbar-width: none;
 }
