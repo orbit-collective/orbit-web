@@ -37,12 +37,15 @@ export function DocsSearch({ onClose }: DocsSearchProps) {
     const dialog = dialogRef.current
     if (!dialog) return
 
-    dialog.showModal()
+    // StrictMode runs this effect twice in dev. Closing the dialog in the
+    // cleanup would queue a "close" event that fires after the second run and
+    // shuts the freshly opened dialog, so the cleanup leaves it alone:
+    // unmounting removes it from the top layer anyway.
+    if (!dialog.open) dialog.showModal()
     document.documentElement.style.overflow = "hidden"
 
     return () => {
       document.documentElement.style.overflow = ""
-      if (dialog.open) dialog.close()
     }
   }, [])
 
