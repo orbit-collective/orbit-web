@@ -55,7 +55,7 @@ export function Navbar() {
       >
         Skip to content
       </a>
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+      <div className="mx-auto flex h-16 max-w-[75rem] items-center justify-between px-6">
         <Link to="/" className="shrink-0">
           <Logo />
         </Link>

@@ -65,7 +65,7 @@ export function DeepDive() {
         style={{ height: `${chapters.length * CHAPTER_HEIGHT_VH}svh` }}
         className="relative hidden md:block"
       >
-        <div className="mx-auto flex max-w-6xl gap-16 px-6">
+        <div className="mx-auto flex max-w-[75rem] gap-16 px-6">
           <div className="sticky top-0 flex h-svh flex-1 items-center justify-center">
             <DeepDivePreview activeIndex={activeIndex} />
           </div>
