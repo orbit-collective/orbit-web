@@ -3,7 +3,7 @@ import { Reveal } from "../atoms/Reveal"
 export function AboutHero() {
   return (
     <section className="mx-auto max-w-3xl px-6 py-20 text-center md:py-28">
-      <Reveal>
+      <Reveal eager>
         <h1 className="text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
           About Orbit
         </h1>
