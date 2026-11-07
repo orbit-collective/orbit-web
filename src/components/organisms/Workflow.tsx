@@ -1,4 +1,4 @@
-import { Activity, Calendar, Kanban, List } from "lucide-react"
+import { Activity, Calendar, Kanban, List, Pause, Play } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import type { KeyboardEvent } from "react"
 import { cn } from "../../lib/cn"
@@ -55,6 +55,9 @@ export function Workflow() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  // Set when someone takes control (picks a tab, or presses the pause button).
+  const [isPaused, setIsPaused] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
 
@@ -76,11 +79,19 @@ export function Workflow() {
     if (focus) tabRefs.current[next]?.focus()
   }
 
+  // A tab picked by hand stays put: it only auto-advances when nobody has chosen.
+  const selectByUser = (index: number, focus = false) => {
+    setIsPaused(true)
+    select(index, focus)
+  }
+
+  const isAdvancing = isVisible && !isHovered && !isFocused && !isPaused
+
   const onKeyDown = (event: KeyboardEvent, index: number) => {
-    if (event.key === "ArrowRight") select(index + 1, true)
-    else if (event.key === "ArrowLeft") select(index - 1, true)
-    else if (event.key === "Home") select(0, true)
-    else if (event.key === "End") select(views.length - 1, true)
+    if (event.key === "ArrowRight") selectByUser(index + 1, true)
+    else if (event.key === "ArrowLeft") selectByUser(index - 1, true)
+    else if (event.key === "Home") selectByUser(0, true)
+    else if (event.key === "End") selectByUser(views.length - 1, true)
     else return
     event.preventDefault()
   }
@@ -92,6 +103,11 @@ export function Workflow() {
       id="workflow"
       ref={sectionRef}
       className="scroll-mt-16 border-t border-line px-6 py-20 md:py-28"
+      onFocusCapture={() => setIsFocused(true)}
+      onBlurCapture={(event) => {
+        // Focus moving between controls inside the section is not leaving it.
+        if (!sectionRef.current?.contains(event.relatedTarget as Node | null)) setIsFocused(false)
+      }}
     >
       <div className="mx-auto max-w-6xl">
         <Reveal className="max-w-2xl">
@@ -105,50 +121,66 @@ export function Workflow() {
         </Reveal>
 
         <Reveal delay={100} className="mt-10">
-          <div
-            role="tablist"
-            aria-label="Issue views"
-            className="flex flex-wrap gap-2"
-            onPointerEnter={() => setIsHovered(true)}
-            onPointerLeave={() => setIsHovered(false)}
-          >
-            {views.map((view, index) => {
-              const isActive = index === activeIndex
-              return (
-                <button
-                  key={view.id}
-                  ref={(node) => {
-                    tabRefs.current[index] = node
-                  }}
-                  type="button"
-                  role="tab"
-                  id={`workflow-tab-${view.id}`}
-                  aria-selected={isActive}
-                  aria-controls="workflow-panel"
-                  tabIndex={isActive ? 0 : -1}
-                  onClick={() => select(index)}
-                  onKeyDown={(event) => onKeyDown(event, index)}
-                  className={cn(
-                    "relative inline-flex cursor-pointer items-center gap-2 overflow-hidden rounded-full border px-4 py-2 text-sm font-medium transition-colors duration-200 ease-in-out",
-                    isActive
-                      ? "border-line-strong bg-surface text-ink"
-                      : "border-line text-ink-muted hover:border-line-strong hover:text-ink",
-                  )}
-                >
-                  <view.icon className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
-                  {view.title}
-                  {isActive ? (
-                    <span
-                      aria-hidden="true"
-                      // A new bar mounts with each tab; when it fills, the next tab opens.
-                      onAnimationEnd={() => select(activeIndex + 1)}
-                      style={{ animationPlayState: isVisible && !isHovered ? "running" : "paused" }}
-                      className="absolute inset-x-0 bottom-0 h-px origin-left animate-[tab-progress_7000ms_linear_forwards] bg-accent motion-reduce:hidden"
-                    />
-                  ) : null}
-                </button>
-              )
-            })}
+          <div className="flex flex-wrap items-center gap-2">
+            <div
+              role="tablist"
+              aria-label="Issue views"
+              className="flex flex-wrap gap-2"
+              onPointerEnter={() => setIsHovered(true)}
+              onPointerLeave={() => setIsHovered(false)}
+            >
+              {views.map((view, index) => {
+                const isActive = index === activeIndex
+                return (
+                  <button
+                    key={view.id}
+                    ref={(node) => {
+                      tabRefs.current[index] = node
+                    }}
+                    type="button"
+                    role="tab"
+                    id={`workflow-tab-${view.id}`}
+                    aria-selected={isActive}
+                    aria-controls="workflow-panel"
+                    tabIndex={isActive ? 0 : -1}
+                    onClick={() => selectByUser(index)}
+                    onKeyDown={(event) => onKeyDown(event, index)}
+                    className={cn(
+                      "relative inline-flex cursor-pointer items-center gap-2 overflow-hidden rounded-full border px-4 py-2 text-sm font-medium transition-colors duration-200 ease-in-out",
+                      isActive
+                        ? "border-line-strong bg-surface text-ink"
+                        : "border-line text-ink-muted hover:border-line-strong hover:text-ink",
+                    )}
+                  >
+                    <view.icon className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+                    {view.title}
+                    {isActive && !isPaused ? (
+                      <span
+                        aria-hidden="true"
+                        // A new bar mounts with each tab; when it fills, the next tab opens.
+                        onAnimationEnd={() => select(activeIndex + 1)}
+                        style={{ animationPlayState: isAdvancing ? "running" : "paused" }}
+                        className="absolute inset-x-0 bottom-0 h-px origin-left animate-[tab-progress_7000ms_linear_forwards] bg-accent motion-reduce:hidden"
+                      />
+                    ) : null}
+                  </button>
+                )
+              })}
+            </div>
+            {/* Automatic switching can be stopped, as moving content must be. Hidden when there is no motion. */}
+            <button
+              type="button"
+              aria-pressed={isPaused}
+              aria-label={isPaused ? "Resume automatic tab switching" : "Pause automatic tab switching"}
+              onClick={() => setIsPaused((paused) => !paused)}
+              className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-line text-ink-muted transition-colors duration-200 ease-in-out hover:border-line-strong hover:text-ink motion-reduce:hidden"
+            >
+              {isPaused ? (
+                <Play className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+              ) : (
+                <Pause className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+              )}
+            </button>
           </div>
           <p className="mt-4 min-h-12 max-w-xl text-base leading-relaxed text-ink-muted sm:min-h-6">
             {active.description}
