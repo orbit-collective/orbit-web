@@ -1,10 +1,20 @@
+import type { CSSProperties } from "react"
+import { cn } from "../../lib/cn"
 import type { Change } from "../../lib/changelog"
 import { InlineText } from "./InlineText"
 
 /** One line of a release: the area it touches, what changed, and the commit it came from. */
-export function ChangeItem({ change }: { change: Change }) {
+export function ChangeItem({
+  change,
+  className,
+  style,
+}: {
+  change: Change
+  className?: string
+  style?: CSSProperties
+}) {
   return (
-    <li className="flex gap-3 py-1.5 text-sm leading-relaxed">
+    <li style={style} className={cn("-mx-2 flex gap-3 rounded-md px-2 py-1.5 text-sm leading-relaxed transition-colors duration-150 ease-in-out hover:bg-surface", className)}>
       <span className="mt-[0.6em] h-1 w-1 shrink-0 rounded-full bg-line-strong" aria-hidden="true" />
       <span className="min-w-0 text-ink-muted">
         {change.scope ? (
