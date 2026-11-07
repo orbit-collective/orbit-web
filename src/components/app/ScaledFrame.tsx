@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from "react"
 import type { ReactNode } from "react"
 import { cn } from "../../lib/cn"
+import { MotionStage } from "./MotionStage"
 
 interface ScaledFrameProps {
   /** The size the view is laid out at, in px: how big it is in the real app. */
@@ -17,6 +18,15 @@ interface ScaledFrameProps {
    * instead of making the text unreadable, which is what a phone gets.
    */
   minScale?: number
+  /**
+   * Play the view's animations when it appears. Turn off when the children
+   * bring their own stages (a stack of views that each replay on their own).
+   */
+  stage?: boolean
+  /** Replay the animations each time this turns back on. */
+  active?: boolean
+  /** Start playing on first paint, from the prerendered HTML. */
+  autoplay?: boolean
 }
 
 /**
@@ -37,6 +47,9 @@ export function ScaledFrame({
   className,
   initialScale = 0.5,
   minScale = 0,
+  stage = true,
+  active,
+  autoplay,
 }: ScaledFrameProps) {
   const frameRef = useRef<HTMLDivElement>(null)
   const sizerRef = useRef<HTMLDivElement>(null)
@@ -74,7 +87,13 @@ export function ScaledFrame({
           className="orbit-app pointer-events-none absolute top-0 left-0 origin-top-left select-none"
           style={{ width, height, transform: `scale(${initialScale})` }}
         >
-          {children}
+          {stage ? (
+            <MotionStage className="h-full" active={active} autoplay={autoplay}>
+              {children}
+            </MotionStage>
+          ) : (
+            children
+          )}
         </div>
       </div>
     </div>
