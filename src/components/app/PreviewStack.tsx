@@ -72,6 +72,7 @@ export function PreviewStack({ panels, activeIndex, className, single }: Preview
                   label={panel.label}
                   initialScale={0.8}
                   minScale={0.6}
+                  active={isActive}
                 >
                   {panel.view}
                 </ScaledFrame>
