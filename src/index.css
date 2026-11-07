@@ -71,8 +71,12 @@
   background-color: var(--bg-color);
 }
 
-.orbit-app .no-scrollbar {
+.no-scrollbar {
   scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 @keyframes dialog-in {
@@ -83,6 +87,15 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes tab-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
   }
 }
 

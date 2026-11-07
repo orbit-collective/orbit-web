@@ -12,6 +12,11 @@ interface ScaledFrameProps {
   className?: string
   /** The scale used in the prerendered HTML, before the real width is known. */
   initialScale?: number
+  /**
+   * The smallest scale to shrink to. A narrower container scrolls sideways
+   * instead of making the text unreadable, which is what a phone gets.
+   */
+  minScale?: number
 }
 
 /**
@@ -22,7 +27,7 @@ interface ScaledFrameProps {
  *
  * The frame keeps the aspect ratio, so it reserves its height before the
  * scale is applied and nothing shifts. The scale is written straight to the
- * element, which keeps resizing off React's render path.
+ * elements, which keeps resizing off React's render path.
  */
 export function ScaledFrame({
   width,
@@ -31,40 +36,46 @@ export function ScaledFrame({
   children,
   className,
   initialScale = 0.5,
+  minScale = 0,
 }: ScaledFrameProps) {
   const frameRef = useRef<HTMLDivElement>(null)
+  const sizerRef = useRef<HTMLDivElement>(null)
   const viewRef = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
     const frame = frameRef.current
+    const sizer = sizerRef.current
     const view = viewRef.current
-    if (!frame || !view) return
+    if (!frame || !sizer || !view) return
 
     const fit = () => {
-      view.style.transform = `scale(${frame.clientWidth / width})`
+      const fitted = Math.max(frame.clientWidth, width * minScale)
+      sizer.style.width = `${fitted}px`
+      view.style.transform = `scale(${fitted / width})`
     }
 
     fit()
     const observer = new ResizeObserver(fit)
     observer.observe(frame)
     return () => observer.disconnect()
-  }, [width])
+  }, [width, minScale])
 
   return (
     <div
       ref={frameRef}
       role="img"
       aria-label={label}
-      className={cn("relative w-full overflow-hidden", className)}
-      style={{ aspectRatio: `${width} / ${height}` }}
+      className={cn("no-scrollbar relative w-full overflow-x-auto overflow-y-hidden", className)}
     >
-      <div
-        ref={viewRef}
-        aria-hidden="true"
-        className="orbit-app pointer-events-none absolute top-0 left-0 origin-top-left select-none"
-        style={{ width, height, transform: `scale(${initialScale})` }}
-      >
-        {children}
+      <div ref={sizerRef} className="relative" style={{ width: "100%", aspectRatio: `${width} / ${height}` }}>
+        <div
+          ref={viewRef}
+          aria-hidden="true"
+          className="orbit-app pointer-events-none absolute top-0 left-0 origin-top-left select-none"
+          style={{ width, height, transform: `scale(${initialScale})` }}
+        >
+          {children}
+        </div>
       </div>
     </div>
   )
