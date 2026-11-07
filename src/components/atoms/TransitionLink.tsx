@@ -11,9 +11,9 @@ type TransitionLinkProps = Omit<ComponentPropsWithoutRef<typeof Link>, "to"> & {
  * synchronously, which is what the browser needs to snapshot the new page.
  *
  * It steps aside, and the link behaves as a normal one, for modified clicks,
- * browsers without the API, reduced motion, the current page, and the docs and
- * the changelog: their code loads lazily, so the new page would not be ready
- * to snapshot.
+ * links that leave the site, browsers without the API, reduced motion, the
+ * current page, and the docs and the changelog: their code loads lazily, so
+ * the new page would not be ready to snapshot.
  */
 export function TransitionLink({ to, onClick, ...props }: TransitionLinkProps) {
   const navigate = useNavigate()
@@ -22,7 +22,11 @@ export function TransitionLink({ to, onClick, ...props }: TransitionLinkProps) {
     onClick?.(event)
 
     const modified = event.metaKey || event.ctrlKey || event.shiftKey || event.altKey
+    // Only paths on this site: an absolute URL (the Download button points at GitHub) is
+    // not something the router can navigate to, so it must stay a normal link.
+    const isInternal = to.startsWith("/") && !to.startsWith("//")
     const canTransition =
+      isInternal &&
       typeof document.startViewTransition === "function" &&
       !event.defaultPrevented &&
       event.button === 0 &&
