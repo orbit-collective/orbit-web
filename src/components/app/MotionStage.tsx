@@ -9,15 +9,17 @@ interface MotionStageProps {
   active?: boolean
   /** Holds every animation back by this much, e.g. while the frame around the stage is still fading in. */
   delay?: string
+  /** Share of the stage that must be visible to play (default 0.25). */
+  threshold?: number
 }
 
 /**
- * The root of a set of app mockup animations. Everything inside that carries
+ * The root of a set of animations (an app mockup, a changelog release). Everything inside that carries
  * an .m-* class (and every CountUp) plays from here: when the stage scrolls
  * into view, and again whenever `active` turns back on. Stages do not nest.
  */
-export function MotionStage({ children, className, autoplay, active, delay }: MotionStageProps) {
-  const ref = useMotionStage<HTMLDivElement>({ autoplay, active })
+export function MotionStage({ children, className, autoplay, active, delay, threshold }: MotionStageProps) {
+  const ref = useMotionStage<HTMLDivElement>({ autoplay, active, threshold })
 
   return (
     <div
