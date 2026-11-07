@@ -33,7 +33,7 @@ export function SearchButton({ onClick, onWarm, className }: SearchButtonProps) 
     >
       <Search className="h-3.5 w-3.5" strokeWidth={1.75} aria-hidden="true" />
       <span>Search</span>
-      <kbd className="ml-2 rounded border border-line-strong px-1.5 py-0.5 text-[10px] font-medium">
+      <kbd className="ml-2 rounded border border-line-strong px-1.5 py-0.5 text-[10px] font-medium [@media(hover:none)]:hidden">
         {isMac ? "⌘K" : "Ctrl K"}
       </kbd>
     </button>
