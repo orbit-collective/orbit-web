@@ -60,6 +60,21 @@ const TAGLINES: Record<string, string> = {
   notifications: "In-app and email, per event type",
 }
 
+let docsWarmed = false
+
+/** Fetches the docs code while the menu opens, so the click that follows is instant. */
+function warmDocs() {
+  if (docsWarmed) return
+  docsWarmed = true
+  void import("../../pages/LearnPage")
+}
+
+function warmCategory(slug: string) {
+  void import("../../lib/docs").then(({ prefetchDocContent, resolveContentKey }) =>
+    prefetchDocContent(resolveContentKey(DEFAULT_LANG, slug)),
+  )
+}
+
 function truncate(text: string, maxLength: number): string {
   return text.length > maxLength ? `${text.slice(0, maxLength).trimEnd()}…` : text
 }
@@ -107,9 +122,9 @@ export function LearnMegaMenu() {
   const [imageFailed, setImageFailed] = useState(false)
 
   return (
-    <div className="group relative">
+    <div className="group relative" onPointerEnter={warmDocs} onFocus={warmDocs}>
       <Link
-        to="/learn"
+        to={`/learn/${DEFAULT_LANG}`}
         className="text-sm font-medium text-ink-muted transition-colors duration-150 ease-in-out hover:text-ink"
       >
         Learn
@@ -133,6 +148,7 @@ export function LearnMegaMenu() {
                     <Link
                       key={category.slug}
                       to={`/learn/${DEFAULT_LANG}/${category.slug}`}
+                      onPointerEnter={() => warmCategory(category.slug)}
                       className="group/item flex items-start gap-3 rounded-lg p-2.5 transition-colors duration-150 ease-in-out hover:bg-surface"
                     >
                       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-line text-ink-muted transition-colors duration-150 ease-in-out group-hover/item:border-line-strong group-hover/item:text-ink">
