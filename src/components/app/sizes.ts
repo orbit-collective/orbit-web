@@ -11,3 +11,4 @@ export const LIVE_SIZE = { width: 560, height: 290 }
 export const DEVELOPMENT_SIZE = { width: 300, height: 385 }
 export const PROJECTS_SIZE = { width: 740, height: 260 }
 export const DASHBOARD_SIZE = { width: 820, height: 300 }
+export const ROLES_SIZE = { width: 300, height: 470 }
