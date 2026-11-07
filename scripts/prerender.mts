@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
-import { createElement } from "react"
+import { Suspense, createElement } from "react"
 import { renderToString } from "react-dom/server"
 import { StaticRouter } from "react-router-dom"
 import { AppRoutes } from "../src/routes"
@@ -28,7 +28,10 @@ const paths = [...staticPaths, ...docPaths, NOT_FOUND_PATH]
 // React 19 hoists <title>/<meta>/<link> rendered anywhere in the tree to the
 // front of the renderToString() output — this pulls that leading run back out
 // so it can be placed in <head>, with the rest going into <div id="root">.
-const HEAD_TAG_RUN = /^(?:<title>.*?<\/title>|<meta[^>]*\/>|<link[^>]*\/>)+/s
+// The JSON-LD <script> from <Seo> is not hoisted but follows that run, and
+// must leave the body too or hydration sees a node the client never renders.
+const HEAD_TAG_RUN =
+  /^(?:<title>.*?<\/title>|<meta[^>]*\/>|<link[^>]*\/>|<script type="application\/ld\+json">.*?<\/script>)+/s
 
 function splitHoistedHead(appHtml: string): { head: string; body: string } {
   const match = appHtml.match(HEAD_TAG_RUN)
@@ -53,13 +56,19 @@ for (const path of paths) {
   // renderToString can't wait, so the page body must already be in the cache.
   if (isLearnRoute) await preloadDocRoute(path)
 
+  // Mirrors the tree in src/App.tsx (router > Suspense > routes): the client
+  // hydrates this HTML, so the Suspense boundary markers must match.
   const appHtml = renderToString(
     createElement(
       StaticRouter,
       { location: path },
-      createElement(AppRoutes, {
-        learnPageElement: isLearnRoute ? createElement(LearnPage) : undefined,
-      }),
+      createElement(
+        Suspense,
+        { fallback: null },
+        createElement(AppRoutes, {
+          learnPageElement: isLearnRoute ? createElement(LearnPage) : undefined,
+        }),
+      ),
     ),
   )
 
