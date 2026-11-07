@@ -20,8 +20,10 @@ if (!existsSync(templatePath)) {
 const template = readFileSync(templatePath, "utf8")
 
 const staticPaths = ["/", "/about", "/download"]
+// Served by netlify.toml for any URL that has no file, with a real 404 status.
+const NOT_FOUND_PATH = "/404"
 const docPaths = getAvailableLangs().flatMap((lang) => getFlatPages(lang).map((page) => page.href))
-const paths = [...staticPaths, ...docPaths]
+const paths = [...staticPaths, ...docPaths, NOT_FOUND_PATH]
 
 // React 19 hoists <title>/<meta>/<link> rendered anywhere in the tree to the
 // front of the renderToString() output — this pulls that leading run back out
@@ -41,6 +43,7 @@ function langFor(path: string): string {
 
 function outputPathFor(path: string): string {
   if (path === "/") return join(distDir, "index.html")
+  if (path === NOT_FOUND_PATH) return join(distDir, "404.html")
   return join(distDir, path.replace(/^\//, ""), "index.html")
 }
 

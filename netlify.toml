@@ -1,0 +1,26 @@
+# Every route is prerendered to its own index.html (scripts/prerender.mts),
+# so redirects only handle what has no file: the /learn shortcut and real 404s.
+
+[[redirects]]
+  from = "/learn"
+  to = "/learn/en"
+  status = 301
+
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
+
+# Vite fingerprints everything in /assets, so it can be cached forever.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
