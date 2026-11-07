@@ -6,6 +6,12 @@
 @import "@fontsource/figtree/600.css";
 @import "@fontsource/figtree/700.css";
 
+/* Orbit's own typeface, used only inside the app mockups (.orbit-app). */
+@import "@fontsource/poppins/latin-400.css";
+@import "@fontsource/poppins/latin-500.css";
+@import "@fontsource/poppins/latin-600.css";
+@import "@fontsource/poppins/latin-700.css";
+
 @theme {
   --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
 
@@ -31,6 +37,42 @@
   --animate-orbit-slow-reverse: orbit 32s linear infinite reverse;
   --animate-orbit-fast: orbit 22s linear infinite reverse;
   --animate-orbit-fast-reverse: orbit 22s linear infinite;
+}
+
+/*
+ * The app mockups reproduce Orbit's real interface, so they carry Orbit's own
+ * dark theme variables and font instead of the site's. These are the values
+ * from resources/css/global.css in the Orbit repository; keep them in sync.
+ */
+.orbit-app {
+  --accent-color: #8844da;
+  --accent-light-color: rgb(183 103 255 / 0.8);
+  --accent-color-opacity: rgba(136, 68, 218, 0.2);
+  --success-color: #4caf50;
+  --error-color: #f44336;
+  --warning-color: #ff9800;
+  --pending-color: #757575;
+  --info-color: #2196f3;
+  --bg-color: #08090a;
+  --bg-color-hover: #101113;
+  --bg-dark-color: #050505;
+  --bg-light-color: rgb(255 255 255 / 0.08);
+  --bg-light-color-hover: rgb(255 255 255 / 0.12);
+  --text-color: #f7f7f8;
+  --text-gray-color: #8a8f98;
+  --text-muted-color: #71717a;
+  --border-color: rgb(255 255 255 / 0.08);
+  --border-color-strong: rgb(255 255 255 / 0.14);
+  --surface-color: rgb(255 255 255 / 0.03);
+  --overlay-color: rgba(0, 0, 0, 0.2);
+
+  font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+}
+
+.orbit-app .no-scrollbar {
+  scrollbar-width: none;
 }
 
 @keyframes dialog-in {
