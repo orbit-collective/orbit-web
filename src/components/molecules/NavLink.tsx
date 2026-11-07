@@ -32,10 +32,15 @@ export function NavLink({ href, children, icon: Icon, external, className, onCli
     )
   }
 
+  // The changelog is its own chunk; fetch it while the pointer is on the link.
+  const warm = href === "/changelog" ? () => void import("../../pages/ChangelogPage") : undefined
+
   return (
     <TransitionLink
       to={href}
       onClick={onClick}
+      onPointerEnter={warm}
+      onFocus={warm}
       className={classes}
       aria-current={isCurrent ? "page" : undefined}
     >
