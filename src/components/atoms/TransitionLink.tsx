@@ -11,8 +11,9 @@ type TransitionLinkProps = Omit<ComponentPropsWithoutRef<typeof Link>, "to"> & {
  * synchronously, which is what the browser needs to snapshot the new page.
  *
  * It steps aside, and the link behaves as a normal one, for modified clicks,
- * browsers without the API, reduced motion, the current page, and the docs:
- * their code loads lazily, so the new page would not be ready to snapshot.
+ * browsers without the API, reduced motion, the current page, and the docs and
+ * the changelog: their code loads lazily, so the new page would not be ready
+ * to snapshot.
  */
 export function TransitionLink({ to, onClick, ...props }: TransitionLinkProps) {
   const navigate = useNavigate()
@@ -27,6 +28,7 @@ export function TransitionLink({ to, onClick, ...props }: TransitionLinkProps) {
       event.button === 0 &&
       !modified &&
       !to.startsWith("/learn") &&
+      to !== "/changelog" &&
       to !== window.location.pathname &&
       !window.matchMedia("(prefers-reduced-motion: reduce)").matches
 

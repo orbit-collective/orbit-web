@@ -5,6 +5,7 @@ import { Suspense, createElement } from "react"
 import { renderToString } from "react-dom/server"
 import { StaticRouter } from "react-router-dom"
 import { AppRoutes } from "../src/routes"
+import { ChangelogPage } from "../src/pages/ChangelogPage"
 import { LearnPage } from "../src/pages/LearnPage"
 import { getAvailableLangs, getFlatPages, preloadDocRoute } from "../src/lib/docs"
 
@@ -82,6 +83,7 @@ for (const path of paths) {
         { fallback: null },
         createElement(AppRoutes, {
           learnPageElement: isLearnRoute ? createElement(LearnPage) : undefined,
+          changelogPageElement: path === "/changelog" ? createElement(ChangelogPage) : undefined,
         }),
       ),
     ),
