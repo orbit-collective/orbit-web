@@ -30,7 +30,8 @@ export function Footer() {
           </NavLink>
         </nav>
 
-        <p className="text-sm text-ink-muted">
+        {/* The year is read at build time for the prerender and again in the browser; they differ on New Year's Day until the next deploy. */}
+        <p className="text-sm text-ink-muted" suppressHydrationWarning>
           &copy; {new Date().getFullYear()} Adiksuu. All rights reserved.
         </p>
       </div>
