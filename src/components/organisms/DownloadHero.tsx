@@ -4,7 +4,7 @@ import { Reveal } from "../atoms/Reveal"
 export function DownloadHero() {
   return (
     <section className="mx-auto max-w-3xl px-6 py-20 text-center md:py-28">
-      <Reveal>
+      <Reveal eager>
         <h1 className="text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
           Run Orbit on your own infrastructure
         </h1>
