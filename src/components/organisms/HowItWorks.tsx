@@ -36,7 +36,7 @@ export function HowItWorks() {
     <section id="how-it-works" className="scroll-mt-16 border-t border-line">
       <div ref={ref} style={{ height: `${steps.length * 80}svh` }} className="relative">
         <div className="sticky top-0 flex h-svh items-center overflow-hidden px-6">
-          <div className="mx-auto grid w-full max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-16">
+          <div className="mx-auto grid w-full max-w-6xl items-center gap-12 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-12">
             <div>
               <Reveal>
                 <h2 className="text-3xl font-semibold tracking-tight text-ink">How it works</h2>
