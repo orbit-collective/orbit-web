@@ -1,4 +1,6 @@
 import { ArrowRight, FolderGit2 } from "lucide-react"
+import { CountUp } from "./CountUp"
+import { motionVars } from "./motionVars"
 
 interface Project {
   name: string
@@ -58,7 +60,9 @@ function Ring({ percent, colorClass }: { percent: number; colorClass: string }) 
       <svg height="44" width="44" className="shrink-0 rotate-[-90deg]">
         <circle className="fill-transparent stroke-[var(--bg-light-color)]" strokeWidth="4" r={RADIUS} cx="22" cy="22" />
         <circle
-          className={`fill-transparent ${colorClass}`}
+          // Draws itself to its value, as ProgressRing does.
+          className={`m-draw fill-transparent ${colorClass}`}
+          style={motionVars({ base: "150ms", from: `${CIRCUMFERENCE}`, to: `${CIRCUMFERENCE - (percent / 100) * CIRCUMFERENCE}` })}
           strokeWidth="4"
           strokeDasharray={`${CIRCUMFERENCE} ${CIRCUMFERENCE}`}
           strokeDashoffset={CIRCUMFERENCE - (percent / 100) * CIRCUMFERENCE}
@@ -69,7 +73,7 @@ function Ring({ percent, colorClass }: { percent: number; colorClass: string }) 
         />
       </svg>
       <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-[var(--text-color)]">
-        {percent}%
+        <CountUp value={percent} suffix="%" delay={150} />
       </span>
     </div>
   )
@@ -82,14 +86,19 @@ function Count({ square, label, value }: { square: string; label: string; value:
         <span className={`inline-block h-2 w-2 shrink-0 rounded-sm ${square}`} />
         {label}
       </span>
-      <span className="font-semibold text-[var(--text-color)]">{value}</span>
+      <span className="font-semibold text-[var(--text-color)]">
+        <CountUp value={value} delay={200} />
+      </span>
     </div>
   )
 }
 
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (
-    <div className="group relative flex w-[340px] flex-col gap-4 overflow-hidden rounded-xl border border-solid border-[var(--border-color)] bg-[var(--surface-color)] p-5">
+    <div
+      // A page section rising into a PageStage: 16 px, 60 ms apart.
+      style={motionVars({ i: index, step: "60ms", base: "50ms", y: "16px" })}
+      className="m-rise group relative flex w-[340px] flex-col gap-4 overflow-hidden rounded-xl border border-solid border-[var(--border-color)] bg-[var(--surface-color)] p-5">
       <span className={`absolute -top-10 -right-8 h-28 w-28 rounded-full opacity-[0.12] blur-2xl ${project.glow}`} />
       <div className="relative flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
@@ -119,7 +128,7 @@ function ProjectCard({ project }: { project: Project }) {
           <div className="flex items-center justify-between gap-2 text-[var(--text-muted-color)]">
             <span>Total</span>
             <span className="font-semibold text-[var(--text-color)]">
-              {project.done}/{project.total} Issues
+              <CountUp value={project.done} delay={200} />/<CountUp value={project.total} delay={200} /> Issues
             </span>
           </div>
         </div>
@@ -132,8 +141,8 @@ function ProjectCard({ project }: { project: Project }) {
 export function ProjectCardsView() {
   return (
     <div className="flex h-full items-center justify-center gap-5 bg-[var(--bg-color)] p-5">
-      {projects.map((project) => (
-        <ProjectCard key={project.slug} project={project} />
+      {projects.map((project, index) => (
+        <ProjectCard key={project.slug} project={project} index={index} />
       ))}
     </div>
   )
