@@ -1,4 +1,4 @@
-import { CircleAlert, Rocket, Unlock, Users } from "lucide-react"
+import { CircleAlert, Rocket, Unlock, Users, Zap } from "lucide-react"
 import { Reveal } from "../atoms/Reveal"
 import { TimelineItem } from "../molecules/TimelineItem"
 
@@ -26,6 +26,12 @@ const chapters = [
     title: "Open and self-hosted",
     description:
       "Released as a self-hosted tool, so every team keeps full control of their own data.",
+  },
+  {
+    icon: Zap,
+    title: "Still shipping",
+    description:
+      "Since then: a GitHub integration, automation rules, a command palette and live updates, in small releases every few days.",
   },
 ]
 
