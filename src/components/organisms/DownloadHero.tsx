@@ -1,10 +1,13 @@
 import { Button } from "../atoms/Button"
 import { Reveal } from "../atoms/Reveal"
+import { ReleaseBadge } from "../molecules/ReleaseBadge"
+import { FALLBACK_RELEASES_URL, getLatestRelease } from "../../lib/release"
 
 export function DownloadHero() {
   return (
     <section className="mx-auto max-w-3xl px-6 py-20 text-center md:py-28">
       <Reveal eager>
+        <ReleaseBadge className="mb-6" />
         <h1 className="text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
           Run Orbit on your own infrastructure
         </h1>
@@ -13,7 +16,9 @@ export function DownloadHero() {
           issue on infrastructure you control, not someone else&apos;s.
         </p>
         <div className="mt-10">
-          <Button size="md" href={"https://github.com/orbit-collective/orbit/releases/latest"}>Download latest release</Button>
+          <Button size="md" href={getLatestRelease()?.url ?? FALLBACK_RELEASES_URL}>
+            Download latest release
+          </Button>
         </div>
       </Reveal>
     </section>
