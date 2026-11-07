@@ -3,6 +3,8 @@ import type { LucideIcon } from "lucide-react"
 import { cn } from "../../lib/cn"
 import { issues, priorities } from "./data"
 import type { Issue, Priority } from "./data"
+import { CountUp } from "./CountUp"
+import { motionVars } from "./motionVars"
 import { Avatar, LabelChip, StatusBadge } from "./parts"
 
 const COLUMN_ICONS: Record<Priority["icon"], LucideIcon> = {
@@ -77,9 +79,12 @@ function tint(hex: string, alpha: number): string {
 }
 
 /** One issue card, as the board and the issue-adding step draw it. */
-export function IssueCard({ issue }: { issue: Issue }) {
+export function IssueCard({ issue, index = 0 }: { issue: Issue; index?: number }) {
   return (
-    <div className="flex flex-col gap-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-light-color)] p-3 text-left shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
+    <div
+      // A spring rise a little after the card before it, capped at 12 like BoardCard.
+      style={motionVars({ i: index, cap: 12 })}
+      className="m-card flex flex-col gap-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-light-color)] p-3 text-left shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
       <div className="flex items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-1.5">
           <span
@@ -121,13 +126,14 @@ export function IssueCard({ issue }: { issue: Issue }) {
  * suffix on a CSS variable), so the browser drops it and the header stays
  * plain. That is what people see, so that is what this draws.
  */
-function Column({ column }: { column: ColumnSpec }) {
+function Column({ column, index }: { column: ColumnSpec; index: number }) {
   const Icon = column.icon
 
   return (
     <div
-      className="flex w-[336px] flex-shrink-0 flex-col overflow-hidden rounded-2xl border"
+      className="m-rise flex w-[336px] flex-shrink-0 flex-col overflow-hidden rounded-2xl border"
       style={{
+        ...motionVars({ i: index, step: "60ms", cap: 9, y: "18px" }),
         borderColor: "var(--border-color)",
         backgroundColor: "var(--bg-color-hover)",
         boxShadow: "rgba(0, 0, 0, 0.5) 0px 4px 10px -6px",
@@ -144,8 +150,9 @@ function Column({ column }: { column: ColumnSpec }) {
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center gap-3">
             <div
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+              className="m-pop flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
               style={{
+                ...motionVars({ base: "150ms", i: index, step: "60ms", cap: 9 }),
                 color: column.color,
                 backgroundColor: column.tinted ? tint(column.color, 0.12) : undefined,
               }}
@@ -170,13 +177,13 @@ function Column({ column }: { column: ColumnSpec }) {
             )}
             style={{ color: column.color, borderColor: tint(column.color, 0.2) }}
           >
-            {column.issues.length}
+            <CountUp value={column.issues.length} delay={300 + index * 60} />
           </span>
         </div>
       </div>
       <div className="flex flex-1 flex-col gap-2.5 p-3">
-        {column.issues.map((issue) => (
-          <IssueCard key={issue.number} issue={issue} />
+        {column.issues.map((issue, index) => (
+          <IssueCard key={issue.number} issue={issue} index={index} />
         ))}
       </div>
     </div>
@@ -215,8 +222,8 @@ export function BoardView({ groupBy = "priority", columns = 3, className }: Boar
       <div className="flex flex-1 gap-5 overflow-hidden p-6">
         {columnsFor(groupBy)
           .slice(0, columns)
-          .map((column) => (
-            <Column key={column.key} column={column} />
+          .map((column, index) => (
+            <Column key={column.key} column={column} index={index} />
           ))}
       </div>
     </div>
