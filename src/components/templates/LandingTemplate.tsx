@@ -3,6 +3,7 @@ import { DeepDive } from "../organisms/DeepDive"
 import { Features } from "../organisms/Features"
 import { Footer } from "../organisms/Footer"
 import { Hero } from "../organisms/Hero"
+import { HeroShowcase } from "../organisms/HeroShowcase"
 import { HowItWorks } from "../organisms/HowItWorks"
 import { Learn } from "../organisms/Learn"
 import { Navbar } from "../organisms/Navbar"
@@ -15,6 +16,7 @@ export function LandingTemplate() {
       <Navbar />
       <main id="main-content" tabIndex={-1} className="outline-none">
         <Hero />
+        <HeroShowcase />
         <Stats />
         <Features />
         <HowItWorks />
