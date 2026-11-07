@@ -1,5 +1,5 @@
 import type { AnchorHTMLAttributes, ReactNode } from "react"
-import { useId } from "react"
+import type { ExtraProps } from "react-markdown"
 import ReactMarkdown from "react-markdown"
 import { Link } from "react-router-dom"
 import rehypeSlug from "rehype-slug"
@@ -10,14 +10,17 @@ import { rehypePrism } from "../../lib/prism"
 import { DocLinkPreviewCard } from "../molecules/DocLinkPreviewCard"
 import { ViewOnGithubLink } from "../molecules/ViewOnGithubLink"
 
-interface DocAnchorProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+interface DocAnchorProps extends AnchorHTMLAttributes<HTMLAnchorElement>, ExtraProps {
   lang: string
   category?: string
   children?: ReactNode
 }
 
-function DocAnchor({ href, lang, category, children }: DocAnchorProps) {
-  const tooltipId = useId()
+function DocAnchor({ href, lang, category, children, node }: DocAnchorProps) {
+  // Derived from where the link sits in the markdown rather than useId(): the
+  // docs chunk hydrates lazily, which gives useId a different tree path than
+  // in the prerendered HTML and breaks aria-describedby.
+  const tooltipId = `doc-link-${node?.position?.start.offset ?? href}`
 
   if (!href || isExternalDocLink(href)) {
     return (
