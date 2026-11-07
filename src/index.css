@@ -188,6 +188,23 @@
   }
 }
 
+/* "Show more" opens and closes smoothly where the browser can animate a details' content (Chrome 131+); elsewhere it just snaps. */
+details.changelog-more {
+  interpolate-size: allow-keywords;
+}
+
+details.changelog-more::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size 400ms var(--m-ease),
+    content-visibility 400ms allow-discrete;
+}
+
+details.changelog-more[open]::details-content {
+  block-size: auto;
+}
+
 @keyframes orbit-rise {
   from {
     opacity: 0;
