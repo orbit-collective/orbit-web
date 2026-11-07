@@ -3,6 +3,7 @@ import { Seo, SITE_URL } from "../components/atoms/Seo"
 import { DocsContent } from "../components/organisms/DocsContent"
 import { DocsTemplate } from "../components/templates/DocsTemplate"
 import { useDocContent } from "../hooks/useDocContent"
+import { useHashScroll } from "../hooks/useHashScroll"
 import {
   getAlternatePaths,
   getCategory,
@@ -33,6 +34,7 @@ function buildBreadcrumbJsonLd(items: BreadcrumbItem[]) {
 export function LearnPage() {
   const { lang = "en", category, slug } = useParams()
   const content = useDocContent(resolveContentKey(lang, category, slug)) ?? ""
+  useHashScroll(content)
 
   const langIndex = getLangIndex(lang)
   if (!langIndex) {
