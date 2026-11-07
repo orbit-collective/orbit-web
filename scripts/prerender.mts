@@ -34,7 +34,7 @@ const siteFontPreloads = preloadFonts("figtree", [400, 500, 600])
 const appFontPreloads = preloadFonts("poppins", [400, 500, 600])
 const PAGES_WITH_APP_MOCKUPS = new Set(["/", "/about"])
 
-const staticPaths = ["/", "/about", "/download"]
+const staticPaths = ["/", "/about", "/download", "/changelog"]
 // Served by netlify.toml for any URL that has no file, with a real 404 status.
 const NOT_FOUND_PATH = "/404"
 const docPaths = getAvailableLangs().flatMap((lang) => getFlatPages(lang).map((page) => page.href))

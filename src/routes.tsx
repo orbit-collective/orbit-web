@@ -2,6 +2,7 @@ import { lazy } from "react"
 import type { ReactNode } from "react"
 import { Navigate, Route, Routes } from "react-router-dom"
 import { AboutPage } from "./pages/AboutPage"
+import { ChangelogPage } from "./pages/ChangelogPage"
 import { DownloadPage } from "./pages/DownloadPage"
 import { HomePage } from "./pages/HomePage"
 import { NotFoundPage } from "./pages/NotFoundPage"
@@ -31,6 +32,7 @@ export function AppRoutes({ learnPageElement }: AppRoutesProps) {
       <Route path="/" element={<HomePage />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/download" element={<DownloadPage />} />
+      <Route path="/changelog" element={<ChangelogPage />} />
       <Route path="/learn" element={<Navigate to="/learn/en" replace />} />
       <Route path="/learn/:lang" element={learnElement} />
       <Route path="/learn/:lang/:category" element={learnElement} />

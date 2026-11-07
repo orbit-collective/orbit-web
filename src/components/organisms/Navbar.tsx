@@ -12,6 +12,7 @@ import { LearnMegaMenu } from "./LearnMegaMenu"
 const navItems = [
   { key: "learn", href: "/learn", label: "Learn" },
   { key: "about", href: "/about", label: "About" },
+  { key: "changelog", href: "/changelog", label: "Changelog" },
   { key: "docs", href: "https://docs.orbit-dev.app", label: "Docs", icon: ExternalLink, external: true },
 ]
 

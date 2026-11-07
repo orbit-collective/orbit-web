@@ -21,13 +21,7 @@ export function Footer() {
           <NavLink href="https://github.com/orbit-collective/orbit" icon={ExternalLink} external>
             GitHub
           </NavLink>
-          <NavLink
-            href="https://github.com/orbit-collective/orbit/blob/master/CHANGELOG.md"
-            icon={ExternalLink}
-            external
-          >
-            Changelog
-          </NavLink>
+          <NavLink href="/changelog">Changelog</NavLink>
         </nav>
 
         {/* The year is read at build time for the prerender and again in the browser; they differ on New Year's Day until the next deploy. */}

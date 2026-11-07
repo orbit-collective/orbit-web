@@ -6,7 +6,7 @@ import { getAvailableLangs, getFlatPages } from "../src/lib/docs"
 const SITE_URL = "https://orbit-dev.app"
 const projectRoot = dirname(dirname(fileURLToPath(import.meta.url)))
 
-const staticPaths = ["/", "/about", "/download"]
+const staticPaths = ["/", "/about", "/download", "/changelog"]
 
 const docPaths = getAvailableLangs().flatMap((lang) => getFlatPages(lang).map((page) => page.href))
 
