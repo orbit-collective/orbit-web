@@ -15,6 +15,8 @@ import {
 
 interface DeepDivePreviewProps {
   activeIndex: number
+  /** Show just this chapter's screen (the phone layout), not the crossfading stack. */
+  single?: boolean
 }
 
 // In the same order as the chapters in DeepDive.
@@ -26,6 +28,13 @@ const panels: PreviewPanel[] = [
   { label: "The activity log of an issue", ...ACTIVITY_SIZE, view: <ActivityView /> },
 ]
 
-export function DeepDivePreview({ activeIndex }: DeepDivePreviewProps) {
-  return <PreviewStack panels={panels} activeIndex={activeIndex} className="h-[33rem]" />
+export function DeepDivePreview({ activeIndex, single }: DeepDivePreviewProps) {
+  return (
+    <PreviewStack
+      panels={panels}
+      activeIndex={activeIndex}
+      single={single}
+      className={single ? undefined : "h-[33rem]"}
+    />
+  )
 }

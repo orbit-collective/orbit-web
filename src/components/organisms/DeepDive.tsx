@@ -103,7 +103,7 @@ export function DeepDive() {
       <div className="flex flex-col gap-16 px-6 py-16 md:hidden">
         {chapters.map((chapter, index) => (
           <div key={chapter.title} className="mx-auto flex w-full max-w-sm flex-col items-center text-center">
-            <DeepDivePreview activeIndex={index} />
+            <DeepDivePreview activeIndex={index} single />
             <div className="mt-6">
               <ChapterSegments activeIndex={index} />
             </div>
