@@ -1,6 +1,5 @@
 import { Filter, History, MessagesSquare, Users } from "lucide-react"
-import { useMemo } from "react"
-import { useScrollProgress } from "../../hooks/useScrollProgress"
+import { useScrollSteps } from "../../hooks/useScrollSteps"
 import { cn } from "../../lib/cn"
 import { DeepDivePreview } from "./DeepDivePreview"
 
@@ -50,12 +49,7 @@ function ChapterSegments({ activeIndex }: { activeIndex: number }) {
 }
 
 export function DeepDive() {
-  const { ref, progress } = useScrollProgress<HTMLDivElement>()
-
-  const activeIndex = useMemo(
-    () => Math.min(chapters.length - 1, Math.floor(progress * chapters.length)),
-    [progress],
-  )
+  const { ref, activeIndex } = useScrollSteps<HTMLDivElement>(chapters.length)
 
   return (
     <section id="deep-dive" className="scroll-mt-16 border-t border-line">

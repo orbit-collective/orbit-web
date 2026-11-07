@@ -4,7 +4,7 @@ import { useParallax } from "../../hooks/useParallax"
 import { OrbitGraphic } from "./OrbitGraphic"
 
 export function Hero() {
-  const parallaxOffset = useParallax(-0.08)
+  const parallaxRef = useParallax<HTMLDivElement>(-0.08)
 
   return (
     <section className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-20 md:grid-cols-2 md:gap-16 md:py-28">
@@ -33,7 +33,7 @@ export function Hero() {
       </div>
 
       <Reveal eager delay={150}>
-        <div style={{ transform: `translateY(${parallaxOffset}px)` }}>
+        <div ref={parallaxRef}>
           <OrbitGraphic />
         </div>
       </Reveal>

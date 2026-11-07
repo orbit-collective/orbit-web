@@ -1,6 +1,5 @@
 import { ArrowRightLeft, ClipboardList, FolderPlus, Rocket } from "lucide-react"
-import { useMemo } from "react"
-import { useScrollProgress } from "../../hooks/useScrollProgress"
+import { useScrollSteps } from "../../hooks/useScrollSteps"
 import { cn } from "../../lib/cn"
 import { Reveal } from "../atoms/Reveal"
 import { HowItWorksPreview } from "./HowItWorksPreview"
@@ -29,12 +28,7 @@ const steps = [
 ]
 
 export function HowItWorks() {
-  const { ref, progress } = useScrollProgress<HTMLDivElement>()
-
-  const activeIndex = useMemo(
-    () => Math.min(steps.length - 1, Math.floor(progress * steps.length)),
-    [progress],
-  )
+  const { ref, activeIndex } = useScrollSteps<HTMLDivElement>(steps.length)
 
   const activeStep = steps[activeIndex]
 

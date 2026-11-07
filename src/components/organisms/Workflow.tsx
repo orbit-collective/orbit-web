@@ -1,6 +1,5 @@
 import { Calendar, Kanban, List, Activity } from "lucide-react"
-import { useMemo } from "react"
-import { useScrollProgress } from "../../hooks/useScrollProgress"
+import { useScrollSteps } from "../../hooks/useScrollSteps"
 import { cn } from "../../lib/cn"
 import { Reveal } from "../atoms/Reveal"
 
@@ -28,12 +27,7 @@ const views = [
 ]
 
 export function Workflow() {
-  const { ref, progress } = useScrollProgress<HTMLDivElement>()
-
-  const activeIndex = useMemo(
-    () => Math.min(views.length - 1, Math.floor(progress * views.length)),
-    [progress],
-  )
+  const { ref, activeIndex } = useScrollSteps<HTMLDivElement>(views.length)
 
   return (
     <section id="workflow" className="scroll-mt-16 border-t border-line">
