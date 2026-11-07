@@ -3,3 +3,4 @@
  * proportions of the real screens; the page only scales them down.
  */
 export const LIST_SIZE = { width: 1100, height: 400 }
+export const BOARD_SIZE = { width: 1100, height: 650 }
