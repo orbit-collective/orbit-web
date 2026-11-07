@@ -8,7 +8,7 @@ export function Hero() {
   const parallaxRef = useParallax<HTMLDivElement>(-0.08)
 
   return (
-    <section className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-20 md:grid-cols-2 md:gap-16 md:py-28">
+    <section className="mx-auto grid max-w-[75rem] items-center gap-12 px-6 pt-20 pb-14 md:grid-cols-2 md:gap-16 md:pt-28 md:pb-16">
       <div>
         <Reveal eager>
           <ReleaseBadge className="mb-6" />
