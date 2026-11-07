@@ -1,4 +1,4 @@
-import { Lock, RefreshCw, Server } from "lucide-react"
+import { DatabaseBackup, Lock, Radio, RefreshCw, Server, Zap } from "lucide-react"
 import { Reveal } from "../atoms/Reveal"
 import { FeatureCard } from "../molecules/FeatureCard"
 
@@ -18,6 +18,24 @@ const benefits = [
     title: "Update on your schedule",
     description: "Upgrade when you're ready, not when a vendor decides to change something.",
   },
+  {
+    icon: DatabaseBackup,
+    title: "Backups included",
+    description:
+      "The Docker stack takes integrity-checked snapshots of your database every hour, keeping a rolling history plus one copy per day.",
+  },
+  {
+    icon: Zap,
+    title: "Fast out of the box",
+    description:
+      "Redis caches the busiest pages, sessions and queues, so Orbit stays quick as your projects and teams grow.",
+  },
+  {
+    icon: Radio,
+    title: "Live, with a safety net",
+    description:
+      "A built-in WebSocket server pushes changes to open pages, and Orbit quietly falls back to polling if it is ever unavailable.",
+  },
 ]
 
 export function DownloadBenefits() {
@@ -33,7 +51,7 @@ export function DownloadBenefits() {
 
         <div className="mt-12 grid gap-4 sm:grid-cols-3">
           {benefits.map((benefit, index) => (
-            <Reveal key={benefit.title} delay={index * 80}>
+            <Reveal key={benefit.title} delay={(index % 3) * 80}>
               <FeatureCard {...benefit} />
             </Reveal>
           ))}
