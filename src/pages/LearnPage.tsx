@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom"
 import { Seo, SITE_URL } from "../components/atoms/Seo"
-import { DocsContent } from "../components/organisms/DocsContent"
+import { DocsBody } from "../components/organisms/DocsBody"
 import { DocsTemplate } from "../components/templates/DocsTemplate"
 import { useDocContent } from "../hooks/useDocContent"
 import { useHashScroll } from "../hooks/useHashScroll"
@@ -33,8 +33,8 @@ function buildBreadcrumbJsonLd(items: BreadcrumbItem[]) {
 
 export function LearnPage() {
   const { lang = "en", category, slug } = useParams()
-  const content = useDocContent(resolveContentKey(lang, category, slug)) ?? ""
-  useHashScroll(content)
+  const doc = useDocContent(resolveContentKey(lang, category, slug))
+  useHashScroll(doc.content)
 
   const langIndex = getLangIndex(lang)
   if (!langIndex) {
@@ -55,7 +55,7 @@ export function LearnPage() {
           ])}
         />
         <DocsTemplate lang={lang} headings={langIndex.headings}>
-          <DocsContent lang={lang} content={content} githubUrl={langIndex.githubUrl} />
+          <DocsBody doc={doc} lang={lang} githubUrl={langIndex.githubUrl} />
         </DocsTemplate>
       </>
     )
@@ -81,11 +81,11 @@ export function LearnPage() {
           ])}
         />
         <DocsTemplate lang={lang} activeCategory={category} headings={categoryData.readme.headings}>
-          <DocsContent
+          <DocsBody
+            doc={doc}
             lang={lang}
             category={category}
             eyebrow={categoryData.title}
-            content={content}
             githubUrl={categoryData.readme.githubUrl}
           />
         </DocsTemplate>
@@ -113,11 +113,11 @@ export function LearnPage() {
         ])}
       />
       <DocsTemplate lang={lang} activeCategory={category} activeSlug={slug} headings={guide.headings}>
-        <DocsContent
+        <DocsBody
+          doc={doc}
           lang={lang}
           category={category}
           eyebrow={categoryData.title}
-          content={content}
           githubUrl={guide.githubUrl}
         />
       </DocsTemplate>
