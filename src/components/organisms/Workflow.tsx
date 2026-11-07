@@ -7,6 +7,7 @@ import { AppFrame } from "../app/AppFrame"
 import { BoardView } from "../app/BoardView"
 import { CalendarView } from "../app/CalendarView"
 import { IssueListView } from "../app/IssueListView"
+import { MotionStage } from "../app/MotionStage"
 import { ScaledFrame } from "../app/ScaledFrame"
 import { Reveal } from "../atoms/Reveal"
 
@@ -168,6 +169,7 @@ export function Workflow() {
                 label={`The ${active.title} view of an Orbit project`}
                 initialScale={0.95}
                 minScale={0.62}
+                stage={false}
               >
                 {views.map((view, index) => (
                   <div
@@ -177,7 +179,10 @@ export function Workflow() {
                       index === activeIndex ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0",
                     )}
                   >
-                    {view.view}
+                    {/* Each view is its own stage, so it plays again every time its tab is opened. */}
+                    <MotionStage className="h-full" active={index === activeIndex}>
+                      {view.view}
+                    </MotionStage>
                   </div>
                 ))}
               </ScaledFrame>
