@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react"
-import { Link } from "react-router-dom"
 import { cn } from "../../lib/cn"
+import { TransitionLink } from "./TransitionLink"
 
 type Variant = "primary" | "secondary" | "ghost"
 type Size = "sm" | "md"
@@ -54,9 +54,9 @@ export function Button({
 
   if (href) {
     return (
-      <Link to={href} className={classes} onClick={onClick}>
+      <TransitionLink to={href} className={classes} onClick={onClick}>
         {children}
-      </Link>
+      </TransitionLink>
     )
   }
 
