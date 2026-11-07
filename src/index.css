@@ -67,6 +67,8 @@
   --overlay-color: rgba(0, 0, 0, 0.2);
 
   font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  /* The mockups sit inside centred sections; the app itself is left-aligned. */
+  text-align: left;
   color: var(--text-color);
   background-color: var(--bg-color);
 }
