@@ -70,6 +70,12 @@ The browser then **hydrates** that HTML (`src/main.tsx`) instead of rendering ag
 
 Above-the-fold content uses `<Reveal eager>`, a CSS animation that plays on first paint; everything else waits to scroll into view.
 
+## The app mockups
+
+The screens on the landing page, About and the deep dive are not images: `src/components/app/` redraws Orbit's real views (list, board, calendar, activity, command palette, dashboard, roles, the whole app shell) as React, with the class lists copied from the rendered components in Orbit's Storybook and Orbit's own theme variables and Poppins in the `.orbit-app` scope (`index.css`; keep it in sync with `resources/css/global.css` in Orbit). `ScaledFrame` lays a view out at its real pixel size and scales it to fit, and `PreviewStack` crossfades several of them.
+
+They move the way the app does. Orbit's motion language (`resources/js/utils/motion.ts`: the same easing, 0.2/0.4/0.8 s durations, 30 and 60 ms staggers, springs, counting numbers, rings that draw, bars that grow) is reproduced as plain CSS in `index.css` (the `.m-*` classes) rather than shipping framer-motion. A `MotionStage` arms its elements at their first frame and plays them when it scrolls into view and each time it becomes active again; `CountUp` counts numbers in step with it, and `motionVars()` sets the per-element timing. The state lives in `data-motion` attributes, so animating never re-renders React, and without JavaScript or with reduced motion everything shows its finished state. Stages do not nest, and custom properties inherit, so always set timing through `motionVars`.
+
 ## Deploying
 
 `netlify.toml` (repository root) holds the redirects and headers: `/learn` → `/learn/en`, real 404s served from the prerendered `404.html`, and immutable caching for the fingerprinted files in `/assets`.
