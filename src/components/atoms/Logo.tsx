@@ -9,6 +9,9 @@ export function LogoMark({ className }: LogoMarkProps) {
     <img
       src="/logo.png"
       alt=""
+      width={48}
+      height={48}
+      decoding="async"
       className={cn("h-12 w-12 object-contain brightness-0 invert", className)}
     />
   )
