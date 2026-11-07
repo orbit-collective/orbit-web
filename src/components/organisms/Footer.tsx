@@ -18,6 +18,16 @@ export function Footer() {
           <NavLink href="https://docs.orbit-dev.app" icon={ExternalLink} external>
             Docs
           </NavLink>
+          <NavLink href="https://github.com/orbit-collective/orbit" icon={ExternalLink} external>
+            GitHub
+          </NavLink>
+          <NavLink
+            href="https://github.com/orbit-collective/orbit/blob/master/CHANGELOG.md"
+            icon={ExternalLink}
+            external
+          >
+            Changelog
+          </NavLink>
         </nav>
 
         <p className="text-sm text-ink-muted">
